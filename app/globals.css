@@ -1,4 +1,53 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html{scroll-behavior:smooth}body{margin:0;background:#F8F3EA;color:#29231F;font-family:var(--font-inter),sans-serif}::selection{background:#5A2530;color:#F8F3EA}.gold-rule{width:72px;height:1px;background:#B28A4A}.section-pad{padding:88px 0}@media(max-width:640px){.section-pad{padding:64px 0}}
+
+:root {
+  --background: #f7f1e5;
+  --foreground: #25352d;
+  --emerald: #17483b;
+  --emerald-dark: #0e3028;
+  --gold: #b99655;
+  --champagne: #d8c08a;
+  --cream: #f7f1e5;
+  --soft: #eee4d1;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), sans-serif;
+}
+
+::selection {
+  background: var(--emerald);
+  color: var(--cream);
+}
+
+.gold-rule {
+  width: 75px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.section-pad {
+  padding: 100px 0;
+}
+
+.wedding-pattern {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(185, 150, 85, 0.12) 1px, transparent 1px),
+    radial-gradient(circle at 80% 80%, rgba(185, 150, 85, 0.08) 1px, transparent 1px);
+  background-size: 35px 35px;
+}
+
+@media (max-width: 640px) {
+  .section-pad {
+    padding: 70px 0;
+  }
+}
