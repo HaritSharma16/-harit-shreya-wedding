@@ -88,8 +88,8 @@ const gallery = [
    public/music/wedding-music.mp3
 ========================================================= */
 
-const MUSIC_START = 0;
-const MUSIC_END = 28;
+const MUSIC_START = 8;
+const MUSIC_END = 36;
 
 /* =========================================================
    COUNTDOWN
