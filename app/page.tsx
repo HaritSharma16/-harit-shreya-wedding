@@ -80,7 +80,6 @@ const gallery = [
    Put file here:
 
    public/music/wedding-music.mp3
-
 ========================================================= */
 
 const MUSIC_START = 0;
@@ -204,11 +203,6 @@ function OpeningInvitation({
 
     setOpening(true);
 
-    /*
-      Let curtain animation start
-      before opening main website.
-    */
-
     setTimeout(() => {
       onOpen();
     }, 1600);
@@ -220,35 +214,34 @@ function OpeningInvitation({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
       onClick={handleOpen}
-      className="fixed inset-0 z-[100] overflow-hidden cursor-pointer bg-[#f7f0e4]"
+      className="fixed inset-0 z-[100] overflow-hidden cursor-pointer bg-[#f8f1e5]"
     >
 
       {/* =====================================================
           CENTER BACKGROUND
       ===================================================== */}
 
-      <div className="absolute inset-0 bg-[#f7f0e4]" />
+      <div className="absolute inset-0 bg-[#f8f1e5]" />
 
 
       {/* =====================================================
-          CENTER CONTENT
+          INVITATION BEHIND CURTAINS
       ===================================================== */}
 
       <motion.div
         initial={{
           opacity: 0,
-          scale: 0.95,
+          scale: 0.96,
         }}
         animate={{
           opacity: 1,
-          scale: opening
-            ? 1.04
-            : 1,
+          scale: opening ? 1.03 : 1,
         }}
         transition={{
-          duration: 1.2,
+          duration: 1.1,
+          ease: "easeOut",
         }}
-        className="absolute inset-0 flex items-center justify-center z-10"
+        className="absolute inset-0 z-10 flex items-center justify-center"
       >
         <div className="text-center px-6">
 
@@ -266,8 +259,9 @@ function OpeningInvitation({
             transition={{
               duration: 4,
               repeat: Infinity,
+              ease: "easeInOut",
             }}
-            className="text-[#b9975b] text-2xl mb-8"
+            className="text-[#b9975b] text-3xl mb-7"
           >
             ✦
           </motion.div>
@@ -275,14 +269,14 @@ function OpeningInvitation({
 
           {/* Blessings */}
 
-          <p className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-[#17463d]/60">
+          <p className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-[#641f2b]/65">
             With the blessings of our families
           </p>
 
 
           {/* Names */}
 
-          <h1 className="font-display text-[65px] sm:text-[110px] leading-[0.75] text-[#17463d] mt-10">
+          <h1 className="font-display text-[68px] sm:text-[115px] leading-[0.75] text-[#641f2b] mt-10">
 
             Harit
 
@@ -295,9 +289,9 @@ function OpeningInvitation({
           </h1>
 
 
-          {/* Wedding */}
+          {/* Wedding text */}
 
-          <p className="font-display text-xl sm:text-2xl text-[#17463d]/75 mt-10">
+          <p className="font-display text-xl sm:text-2xl text-[#641f2b]/80 mt-10">
             are getting married
           </p>
 
@@ -308,7 +302,7 @@ function OpeningInvitation({
 
             <span className="w-10 sm:w-14 h-px bg-[#b9975b]" />
 
-            <span className="text-[9px] sm:text-[10px] tracking-[0.3em] text-[#17463d] whitespace-nowrap">
+            <span className="text-[9px] sm:text-[10px] tracking-[0.3em] text-[#641f2b] whitespace-nowrap">
               12 · NOVEMBER · 2026
             </span>
 
@@ -317,7 +311,9 @@ function OpeningInvitation({
           </div>
 
 
-          <p className="text-[9px] tracking-[0.4em] uppercase text-[#17463d]/50 mt-4">
+          {/* Location */}
+
+          <p className="text-[9px] tracking-[0.4em] uppercase text-[#641f2b]/55 mt-4">
             Pathankot
           </p>
 
@@ -339,15 +335,19 @@ function OpeningInvitation({
             }}
             className="mt-12"
           >
-            <div className="w-9 h-9 rounded-full border border-[#b9975b] flex items-center justify-center mx-auto">
-              <span className="text-[#b9975b]">
+
+            <div className="w-10 h-10 rounded-full border border-[#b9975b] flex items-center justify-center mx-auto">
+
+              <span className="text-[#b9975b] text-lg">
                 ↓
               </span>
+
             </div>
 
-            <p className="text-[8px] tracking-[0.4em] uppercase text-[#17463d]/60 mt-3">
+            <p className="text-[8px] tracking-[0.4em] uppercase text-[#641f2b]/60 mt-3">
               Tap to open
             </p>
+
           </motion.div>
 
         </div>
@@ -355,7 +355,7 @@ function OpeningInvitation({
 
 
       {/* =====================================================
-          LEFT CURTAIN
+          LEFT FULL CURTAIN
       ===================================================== */}
 
       <motion.div
@@ -374,40 +374,52 @@ function OpeningInvitation({
             1,
           ],
         }}
-        className="absolute left-0 top-0 bottom-0 w-[28%] sm:w-[30%] bg-[#17463d] z-20 overflow-hidden"
+        className="absolute left-0 top-0 bottom-0 w-1/2 bg-[#641f2b] z-20 overflow-hidden"
       >
+
+        {/* Main fabric */}
+
+        <div className="absolute inset-0 bg-gradient-to-r from-[#4d1621] via-[#702331] to-[#591b27]" />
+
 
         {/* Curtain folds */}
 
         <div className="absolute inset-0">
-          {[...Array(6)].map(
+
+          {[...Array(10)].map(
             (_, i) => (
               <div
                 key={i}
-                className="absolute top-0 bottom-0 w-[35%] bg-black/10"
+                className="absolute top-0 bottom-0"
                 style={{
-                  left: `${i * 18}%`,
+                  left: `${i * 11}%`,
+                  width: "11%",
+                  background:
+                    i % 2 === 0
+                      ? "rgba(255,255,255,0.035)"
+                      : "rgba(0,0,0,0.10)",
                 }}
               />
             )
           )}
+
         </div>
 
 
-        {/* Highlight */}
+        {/* Soft highlight */}
 
-        <div className="absolute inset-y-0 right-0 w-[20%] bg-white/5 blur-md" />
+        <div className="absolute inset-y-0 right-0 w-[18%] bg-white/[0.08] blur-xl" />
 
 
-        {/* Gold edge */}
+        {/* Gold center edge */}
 
-        <div className="absolute right-0 top-0 bottom-0 w-[2px] bg-[#b9975b]" />
+        <div className="absolute right-0 top-0 bottom-0 w-[3px] bg-[#c9a96a] shadow-[0_0_12px_rgba(201,169,106,0.35)]" />
 
       </motion.div>
 
 
       {/* =====================================================
-          RIGHT CURTAIN
+          RIGHT FULL CURTAIN
       ===================================================== */}
 
       <motion.div
@@ -426,34 +438,46 @@ function OpeningInvitation({
             1,
           ],
         }}
-        className="absolute right-0 top-0 bottom-0 w-[28%] sm:w-[30%] bg-[#17463d] z-20 overflow-hidden"
+        className="absolute right-0 top-0 bottom-0 w-1/2 bg-[#641f2b] z-20 overflow-hidden"
       >
+
+        {/* Main fabric */}
+
+        <div className="absolute inset-0 bg-gradient-to-l from-[#4d1621] via-[#702331] to-[#591b27]" />
+
 
         {/* Curtain folds */}
 
         <div className="absolute inset-0">
-          {[...Array(6)].map(
+
+          {[...Array(10)].map(
             (_, i) => (
               <div
                 key={i}
-                className="absolute top-0 bottom-0 w-[35%] bg-black/10"
+                className="absolute top-0 bottom-0"
                 style={{
-                  right: `${i * 18}%`,
+                  right: `${i * 11}%`,
+                  width: "11%",
+                  background:
+                    i % 2 === 0
+                      ? "rgba(255,255,255,0.035)"
+                      : "rgba(0,0,0,0.10)",
                 }}
               />
             )
           )}
+
         </div>
 
 
-        {/* Highlight */}
+        {/* Soft highlight */}
 
-        <div className="absolute inset-y-0 left-0 w-[20%] bg-white/5 blur-md" />
+        <div className="absolute inset-y-0 left-0 w-[18%] bg-white/[0.08] blur-xl" />
 
 
-        {/* Gold edge */}
+        {/* Gold center edge */}
 
-        <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#b9975b]" />
+        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#c9a96a] shadow-[0_0_12px_rgba(201,169,106,0.35)]" />
 
       </motion.div>
 
@@ -462,14 +486,14 @@ function OpeningInvitation({
           TOP GOLD CURTAIN ROD
       ===================================================== */}
 
-      <div className="absolute top-0 left-0 right-0 h-3 bg-[#b9975b] z-30 shadow-md" />
+      <div className="absolute top-0 left-0 right-0 h-[7px] bg-[#c9a96a] z-30 shadow-md" />
 
 
       {/* =====================================================
           OUTER FRAME
       ===================================================== */}
 
-      <div className="absolute inset-5 sm:inset-8 border border-[#b9975b]/30 z-40 pointer-events-none" />
+      <div className="absolute inset-5 sm:inset-8 border border-[#c9a96a]/35 z-40 pointer-events-none" />
 
 
       {/* =====================================================
@@ -487,7 +511,7 @@ function OpeningInvitation({
         }}
         className="absolute bottom-8 left-0 right-0 z-40 text-center pointer-events-none"
       >
-        <span className="text-[#b9975b] text-sm">
+        <span className="text-[#c9a96a] text-sm">
           ✦
         </span>
       </motion.div>
@@ -613,16 +637,12 @@ export default function WeddingSite() {
       .then(() => {
         setMusicPlaying(true);
 
-        /* Fade in */
-
         fadeAudio(
           audio,
           0,
           0.35,
           2000
         );
-
-        /* Stop after selected section */
 
         stopTimerRef.current =
           setTimeout(() => {
@@ -1200,8 +1220,6 @@ export default function WeddingSite() {
 
           <div className="grid md:grid-cols-2 gap-7">
 
-            {/* Groom */}
-
             <div className="border border-gold/35 bg-cream p-10">
 
               <p className="text-[10px] tracking-[0.35em] uppercase text-gold">
@@ -1225,8 +1243,6 @@ export default function WeddingSite() {
 
             </div>
 
-
-            {/* Bride */}
 
             <div className="border border-gold/35 bg-cream p-10">
 
