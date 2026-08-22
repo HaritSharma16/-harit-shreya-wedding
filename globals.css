@@ -1,4 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-html{scroll-behavior:smooth}body{margin:0;background:#F8F3EA;color:#29231F;font-family:var(--font-inter),sans-serif}::selection{background:#5A2530;color:#F8F3EA}.gold-rule{width:72px;height:1px;background:#B28A4A}.section-pad{padding:88px 0}@media(max-width:640px){.section-pad{padding:64px 0}}
