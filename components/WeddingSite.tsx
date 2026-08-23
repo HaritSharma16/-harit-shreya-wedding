@@ -519,22 +519,586 @@ function DateReveal({
 }: {
   onReveal: () => void;
 }) {
-  const [revealed, setRevealed] =
-    useState(false);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const [scratched, setScratched] =
-    useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const [celebration, setCelebration] = useState(false);
+  const [scratchPercent, setScratchPercent] = useState(0);
 
-  const revealDate = () => {
+  const isScratching = useRef(false);
+  const celebrationShown = useRef(false);
+  const revealTriggered = useRef(false);
+
+  /* =========================================================
+     CANVAS SETUP
+  ========================================================= */
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+
+    if (!canvas) return;
+
+    const container = canvas.parentElement;
+
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
+
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx) return;
+
+    ctx.scale(dpr, dpr);
+
+    /* =======================================================
+       GOLD SCRATCH SURFACE
+    ======================================================= */
+
+    const gradient = ctx.createLinearGradient(
+      0,
+      0,
+      rect.width,
+      rect.height
+    );
+
+    gradient.addColorStop(0, "#b9975b");
+    gradient.addColorStop(0.35, "#d4b979");
+    gradient.addColorStop(0.65, "#9d7c42");
+    gradient.addColorStop(1, "#c6a85f");
+
+    ctx.fillStyle = gradient;
+
+    ctx.fillRect(
+      0,
+      0,
+      rect.width,
+      rect.height
+    );
+
+    /* =======================================================
+       GOLD TEXTURE
+    ======================================================= */
+
+    for (let i = 0; i < 100; i++) {
+      const x = Math.random() * rect.width;
+      const y = Math.random() * rect.height;
+
+      ctx.beginPath();
+
+      ctx.arc(
+        x,
+        y,
+        Math.random() * 1.5,
+        0,
+        Math.PI * 2
+      );
+
+      ctx.fillStyle = "rgba(255,255,255,0.18)";
+
+      ctx.fill();
+    }
+  }, []);
+
+  /* =========================================================
+     GET POINTER POSITION
+  ========================================================= */
+
+  const getPosition = (
+    event:
+      | React.MouseEvent<HTMLCanvasElement>
+      | React.TouchEvent<HTMLCanvasElement>
+  ) => {
+    const canvas = canvasRef.current;
+
+    if (!canvas) {
+      return {
+        x: 0,
+        y: 0,
+      };
+    }
+
+    const rect = canvas.getBoundingClientRect();
+
+    let clientX = 0;
+    let clientY = 0;
+
+    if ("touches" in event) {
+      const touch =
+        event.touches[0] ||
+        event.changedTouches[0];
+
+      if (!touch) {
+        return {
+          x: 0,
+          y: 0,
+        };
+      }
+
+      clientX = touch.clientX;
+      clientY = touch.clientY;
+    } else {
+      clientX = event.clientX;
+      clientY = event.clientY;
+    }
+
+    return {
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    };
+  };
+
+  /* =========================================================
+     CALCULATE SCRATCHED AREA
+  ========================================================= */
+
+  const calculateScratchPercent = () => {
+    const canvas = canvasRef.current;
+
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx) return;
+
+    const width = canvas.width;
+    const height = canvas.height;
+
+    const imageData = ctx.getImageData(
+      0,
+      0,
+      width,
+      height
+    );
+
+    const pixels = imageData.data;
+
+    let transparentPixels = 0;
+
+    /*
+      Check every few pixels instead of every pixel
+      for better mobile performance.
+    */
+
+    const step = 8;
+
+    for (
+      let i = 3;
+      i < pixels.length;
+      i += 4 * step
+    ) {
+      if (pixels[i] < 100) {
+        transparentPixels++;
+      }
+    }
+
+    const totalPixels =
+      pixels.length / (4 * step);
+
+    const percent =
+      (transparentPixels / totalPixels) * 100;
+
+    const roundedPercent = Math.min(
+      Math.round(percent),
+      100
+    );
+
+    setScratchPercent(
+      roundedPercent
+    );
+
+    /* =======================================================
+       CELEBRATION
+    ======================================================= */
+
+    if (
+      roundedPercent >= 25 &&
+      !celebrationShown.current
+    ) {
+      celebrationShown.current = true;
+
+      setCelebration(true);
+
+      window.setTimeout(() => {
+        setCelebration(false);
+      }, 1800);
+    }
+
+    /* =======================================================
+       AUTO REVEAL
+    ======================================================= */
+
+    if (
+      roundedPercent >= 55 &&
+      !revealTriggered.current
+    ) {
+      revealTriggered.current = true;
+
+      setRevealed(true);
+
+      window.setTimeout(() => {
+        onReveal();
+      }, 500);
+    }
+  };
+
+  /* =========================================================
+     SCRATCH
+  ========================================================= */
+
+  const scratch = (
+    event:
+      | React.MouseEvent<HTMLCanvasElement>
+      | React.TouchEvent<HTMLCanvasElement>
+  ) => {
     if (revealed) return;
 
-    setScratched(100);
+    if (!isScratching.current) return;
 
-    window.setTimeout(() => {
-      setRevealed(true);
-      onReveal();
-    }, 500);
+    const canvas = canvasRef.current;
+
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx) return;
+
+    const { x, y } =
+      getPosition(event);
+
+    /*
+      Erase a reasonably large circular area.
+      This makes the interaction feel like a real
+      scratch card rather than tiny pixel erasing.
+    */
+
+    ctx.globalCompositeOperation =
+      "destination-out";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      x,
+      y,
+      28,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fill();
+
+    /*
+      Draw another slightly smaller circle
+      for smoother scratch edges.
+    */
+
+    ctx.beginPath();
+
+    ctx.arc(
+      x,
+      y,
+      20,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fill();
+
+    ctx.globalCompositeOperation =
+      "source-over";
+
+    calculateScratchPercent();
   };
+
+  /* =========================================================
+     START SCRATCH
+  ========================================================= */
+
+  const startScratch = (
+    event:
+      | React.MouseEvent<HTMLCanvasElement>
+      | React.TouchEvent<HTMLCanvasElement>
+  ) => {
+    if (revealed) return;
+
+    isScratching.current = true;
+
+    scratch(event);
+  };
+
+  /* =========================================================
+     STOP SCRATCH
+  ========================================================= */
+
+  const stopScratch = () => {
+    isScratching.current = false;
+  };
+
+  return (
+    <section className="py-24 bg-[#eee3d2]">
+
+      <div className="max-w-3xl mx-auto px-5 text-center">
+
+        {/* ===================================================
+            HEADING
+        =================================================== */}
+
+        <p className="text-[10px] tracking-[0.4em] uppercase text-[#b9975b]">
+          A little secret
+        </p>
+
+        <h2 className="font-display text-5xl sm:text-6xl text-[#17463d] mt-4">
+          When is the big day?
+        </h2>
+
+        <div className="w-16 h-px bg-[#b9975b] mx-auto mt-6" />
+
+        <p className="text-sm text-[#17463d]/60 mt-7">
+          Scratch the card to discover our wedding date.
+        </p>
+
+        {/* ===================================================
+            SCRATCH CARD
+        =================================================== */}
+
+        <div className="mt-10 mx-auto max-w-md">
+
+          <div
+            className="relative h-52 sm:h-60 border border-[#b9975b]/50 bg-[#f5eee2] overflow-hidden shadow-lg select-none"
+            style={{
+              touchAction: "none",
+            }}
+          >
+
+            {/* =================================================
+                ACTUAL DATE
+            ================================================= */}
+
+            <div className="absolute inset-0 flex items-center justify-center">
+
+              <div>
+
+                <p className="text-[9px] tracking-[0.4em] uppercase text-[#b9975b]">
+                  Save the date
+                </p>
+
+                <p className="font-display text-5xl sm:text-6xl text-[#17463d] mt-5">
+                  12 November
+                </p>
+
+                <p className="tracking-[0.4em] text-xs text-[#17463d]/60 mt-3">
+                  2026
+                </p>
+
+              </div>
+
+            </div>
+
+            {/* =================================================
+                SCRATCH CANVAS
+            ================================================= */}
+
+            {!revealed && (
+              <canvas
+                ref={canvasRef}
+                onMouseDown={startScratch}
+                onMouseMove={scratch}
+                onMouseUp={stopScratch}
+                onMouseLeave={stopScratch}
+                onTouchStart={startScratch}
+                onTouchMove={scratch}
+                onTouchEnd={stopScratch}
+                onTouchCancel={stopScratch}
+                className="absolute inset-0 w-full h-full cursor-pointer"
+              />
+            )}
+
+            {/* =================================================
+                SCRATCH INSTRUCTION
+            ================================================= */}
+
+            {!revealed &&
+              scratchPercent < 8 && (
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+
+                  <div className="text-center text-white">
+
+                    <div className="text-4xl mb-4">
+                      ✦
+                    </div>
+
+                    <p className="text-[10px] tracking-[0.35em] uppercase">
+                      Scratch to reveal
+                    </p>
+
+                    <p className="text-xs mt-3 text-white/70">
+                      Use your finger to scratch
+                    </p>
+
+                    <div className="mt-6 mx-auto w-20 h-px bg-white/50" />
+
+                  </div>
+
+                </div>
+              )}
+
+            {/* =================================================
+                CELEBRATION
+            ================================================= */}
+
+            <AnimatePresence>
+              {celebration && (
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    scale: 0.4,
+                    y: 20,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    scale: 1.4,
+                    y: -30,
+                  }}
+                  transition={{
+                    duration: 0.5,
+                  }}
+                  className="absolute inset-0 pointer-events-none flex items-center justify-center"
+                >
+
+                  <div className="text-5xl sm:text-6xl flex gap-3">
+
+                    <motion.span
+                      animate={{
+                        y: [0, -15, 0],
+                        rotate: [0, -10, 10, 0],
+                      }}
+                      transition={{
+                        duration: 0.8,
+                        repeat: 2,
+                      }}
+                    >
+                      🎉
+                    </motion.span>
+
+                    <motion.span
+                      animate={{
+                        y: [0, -20, 0],
+                        rotate: [0, 15, -15, 0],
+                      }}
+                      transition={{
+                        duration: 0.8,
+                        delay: 0.1,
+                        repeat: 2,
+                      }}
+                    >
+                      ✨
+                    </motion.span>
+
+                    <motion.span
+                      animate={{
+                        y: [0, -15, 0],
+                        rotate: [0, -10, 10, 0],
+                      }}
+                      transition={{
+                        duration: 0.8,
+                        delay: 0.2,
+                        repeat: 2,
+                      }}
+                    >
+                      💍
+                    </motion.span>
+
+                  </div>
+
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* =================================================
+                SCRATCH PROGRESS
+            ================================================= */}
+
+            {!revealed &&
+              scratchPercent > 5 && (
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/10 pointer-events-none">
+
+                  <motion.div
+                    className="h-full bg-[#17463d]"
+                    animate={{
+                      width: `${scratchPercent}%`,
+                    }}
+                  />
+
+                </div>
+              )}
+
+          </div>
+
+          {/* ===================================================
+              SCRATCH STATUS
+          =================================================== */}
+
+          {!revealed && scratchPercent > 8 && (
+            <motion.p
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              className="mt-6 text-[9px] tracking-[0.3em] uppercase text-[#17463d]/50"
+            >
+              Keep scratching... {scratchPercent}%
+            </motion.p>
+          )}
+
+          {/* ===================================================
+              REVEALED MESSAGE
+          =================================================== */}
+
+          {revealed && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 15,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              className="mt-7"
+            >
+
+              <div className="text-3xl mb-3">
+                🎉 ✨ 💍
+              </div>
+
+              <p className="text-[10px] tracking-[0.3em] uppercase text-[#17463d]">
+                The countdown has begun
+              </p>
+
+            </motion.div>
+          )}
+
+        </div>
+
+      </div>
+
+    </section>
+  );
+}
 
   return (
     <section className="py-24 bg-[#eee3d2]">
