@@ -290,22 +290,21 @@ function OpeningCurtain({
           >
             ✦
           </motion.div>
-
-          <p className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-[#17463d]/80 font-medium">
+        <p className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-black/70">
   With the blessings of our families
 </p>
 
-          <h1 className="font-display text-[65px] sm:text-[105px] leading-[0.75] text-[#0b3029] drop-shadow-[0_2px_8px_rgba(185,151,91,0.18)]">
+<h1 className="font-display text-[65px] sm:text-[105px] leading-[0.75] text-black mt-8">
   Harit
 
-  <span className="block text-4xl sm:text-6xl text-[#a27b35] my-6 font-medium">
+  <span className="block text-4xl sm:text-6xl text-[#b9975b] my-6">
     &
   </span>
 
   Shreya
 </h1>
 
-          <p className="font-display text-xl sm:text-2xl text-[#17463d]/80 mt-9">
+<p className="font-display text-xl sm:text-2xl text-black/70 mt-9">
   A celebration of two families
 </p>
 
@@ -326,7 +325,7 @@ function OpeningCurtain({
                 }
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "groom"
-                    ? "bg-[#17463d] text-white border-[#17463d]"
+                    ? "bg-[#17463d] text-black border-[#17463d]"
                     : "bg-transparent border-[#b9975b] text-[#17463d]"
                 }`}
               >
@@ -340,7 +339,7 @@ function OpeningCurtain({
                 }
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "bride"
-                    ? "bg-[#17463d] text-white border-[#17463d]"
+                    ? "bg-[#17463d] text-black border-[#17463d]"
                     : "bg-transparent border-[#b9975b] text-[#17463d]"
                 }`}
               >
