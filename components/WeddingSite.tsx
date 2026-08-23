@@ -237,7 +237,7 @@ function OpeningCurtain({
   onOpen: (side: Side) => void;
 }) {
   const [selectedSide, setSelectedSide] =
-    useState<Side>("groom");
+    useState<Side | null>(null);
 
   const [opening, setOpening] =
     useState(false);
@@ -323,7 +323,7 @@ function OpeningCurtain({
                 onClick={() =>
                   setSelectedSide("groom")
                 }
-                className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
+                className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all z-10${
                   selectedSide === "groom"
                     ? "bg-[#b9975b] text-white border-[#17463d]"
                     : "bg-[#17463d] border-[#b9975b] text-black"
