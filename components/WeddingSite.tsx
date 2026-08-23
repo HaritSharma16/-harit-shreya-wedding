@@ -890,7 +890,7 @@ function OpeningCurtain({
       >
 
         <div className="absolute right-0 top-0 bottom-0 w-px bg-[#c99a98]/70" />
-
+</motion.div>
       {/* RIGHT CURTAIN */}
 
       <motion.div
@@ -912,7 +912,7 @@ function OpeningCurtain({
       >
 
        <div className="absolute left-0 top-0 bottom-0 w-px bg-[#c99a98]/70" />
-
+</motion.div>
       {/* TOP DECOR */}
 
       <div className="absolute top-0 left-0 right-0 z-40 pointer-events-none">
