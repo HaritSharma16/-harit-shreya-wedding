@@ -312,7 +312,7 @@ function OpeningCurtain({
 
           <div className="mt-10">
 
-            <p className="text-[9px] tracking-[0.35em] uppercase text-black/50 mb-5 font-bold">
+            <p className="text-[9px] tracking-[0.35em] uppercase text-black/80 mb-5 font-bold">
               Choose your side
             </p>
 
@@ -339,7 +339,7 @@ function OpeningCurtain({
                 }
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "bride"
-                    ? "bg-[#17463d] text-black border-[#17463d]"
+                    ? "bg-[#b9975b] text-white border-[#17463d]"
                     : "bg-transparent border-[#b9975b] text-[#17463d]"
                 }`}
               >
