@@ -1,4 +1,3 @@
-```tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -19,6 +18,16 @@ type WeddingEvent = {
   map: string;
   description: string;
 };
+
+/* =========================================================
+   CONSTANTS
+========================================================= */
+
+const WEDDING_DATE = new Date(
+  "2026-11-12T18:00:00+05:30"
+).getTime();
+
+const MUSIC_START = 8;
 
 /* =========================================================
    EVENTS
@@ -121,20 +130,10 @@ const gallery = [
 ];
 
 /* =========================================================
-   MUSIC
-========================================================= */
-
-const MUSIC_START = 8;
-
-/* =========================================================
    COUNTDOWN
 ========================================================= */
 
 function Countdown() {
-  const weddingDate = new Date(
-    "2026-11-12T18:00:00+05:30"
-  ).getTime();
-
   const [time, setTime] = useState({
     days: 0,
     hours: 0,
@@ -145,7 +144,7 @@ function Countdown() {
   useEffect(() => {
     const update = () => {
       const difference = Math.max(
-        weddingDate - Date.now(),
+        WEDDING_DATE - Date.now(),
         0
       );
 
@@ -172,7 +171,7 @@ function Countdown() {
     return () => {
       window.clearInterval(timer);
     };
-  }, [weddingDate]);
+  }, []);
 
   return (
     <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-2xl mx-auto">
@@ -232,8 +231,7 @@ function OpeningCurtain({
   const [selectedSide, setSelectedSide] =
     useState<Side>("groom");
 
-  const [opening, setOpening] =
-    useState(false);
+  const [opening, setOpening] = useState(false);
 
   const handleReveal = () => {
     if (opening) return;
@@ -247,7 +245,6 @@ function OpeningCurtain({
 
   return (
     <div className="fixed inset-0 z-[9999] overflow-hidden bg-[#f5eee2]">
-
       {/* CENTER BACKGROUND */}
 
       <div className="absolute inset-0 bg-[#f5eee2]" />
@@ -263,7 +260,6 @@ function OpeningCurtain({
         className="absolute inset-0 z-10 flex items-center justify-center px-5"
       >
         <div className="text-center w-full max-w-xl">
-
           <motion.div
             animate={{
               opacity: [0.5, 1, 0.5],
@@ -299,18 +295,14 @@ function OpeningCurtain({
           {/* SIDE SELECTION */}
 
           <div className="mt-10">
-
             <p className="text-[9px] tracking-[0.35em] uppercase text-[#17463d]/50 mb-5">
               Choose your side
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-
               <button
                 type="button"
-                onClick={() =>
-                  setSelectedSide("groom")
-                }
+                onClick={() => setSelectedSide("groom")}
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "groom"
                     ? "bg-[#17463d] text-white border-[#17463d]"
@@ -322,9 +314,7 @@ function OpeningCurtain({
 
               <button
                 type="button"
-                onClick={() =>
-                  setSelectedSide("bride")
-                }
+                onClick={() => setSelectedSide("bride")}
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "bride"
                     ? "bg-[#17463d] text-white border-[#17463d]"
@@ -333,7 +323,6 @@ function OpeningCurtain({
               >
                 Bride&apos;s Side
               </button>
-
             </div>
           </div>
 
@@ -457,11 +446,8 @@ function OpeningCurtain({
       </div>
 
       <div className="absolute bottom-7 left-0 right-0 z-40 text-center pointer-events-none">
-        <span className="text-[#b9975b]">
-          ✦
-        </span>
+        <span className="text-[#b9975b]">✦</span>
       </div>
-
     </div>
   );
 }
@@ -475,11 +461,8 @@ function DateReveal({
 }: {
   onReveal: () => void;
 }) {
-  const [revealed, setRevealed] =
-    useState(false);
-
-  const [scratched, setScratched] =
-    useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const [scratched, setScratched] = useState(0);
 
   const revealDate = () => {
     if (revealed) return;
@@ -494,9 +477,7 @@ function DateReveal({
 
   return (
     <section className="py-24 bg-[#eee3d2]">
-
       <div className="max-w-3xl mx-auto px-5 text-center">
-
         <p className="text-[10px] tracking-[0.4em] uppercase text-[#b9975b]">
           A little secret
         </p>
@@ -512,18 +493,14 @@ function DateReveal({
         </p>
 
         <div className="mt-10 mx-auto max-w-md">
-
           <div
             className="relative h-52 sm:h-60 border border-[#b9975b]/50 bg-[#f5eee2] overflow-hidden cursor-pointer shadow-lg"
             onClick={revealDate}
           >
-
             {/* ACTUAL DATE */}
 
             <div className="absolute inset-0 flex items-center justify-center">
-
               <div>
-
                 <p className="text-[9px] tracking-[0.4em] uppercase text-[#b9975b]">
                   Save the date
                 </p>
@@ -535,9 +512,7 @@ function DateReveal({
                 <p className="tracking-[0.4em] text-xs text-[#17463d]/60 mt-3">
                   2026
                 </p>
-
               </div>
-
             </div>
 
             {/* SCRATCH LAYER */}
@@ -555,29 +530,21 @@ function DateReveal({
                   "linear-gradient(135deg,#b9975b,#d4b979,#9d7c42,#c6a85f)",
               }}
             >
-
               <div className="absolute inset-0 opacity-20">
-
-                {[...Array(80)].map(
-                  (_, index) => (
-                    <span
-                      key={index}
-                      className="absolute w-1 h-1 rounded-full bg-white"
-                      style={{
-                        left: `${(index * 37) % 100}%`,
-                        top: `${(index * 61) % 100}%`,
-                      }}
-                    />
-                  )
-                )}
-
+                {[...Array(80)].map((_, index) => (
+                  <span
+                    key={index}
+                    className="absolute w-1 h-1 rounded-full bg-white"
+                    style={{
+                      left: `${(index * 37) % 100}%`,
+                      top: `${(index * 61) % 100}%`,
+                    }}
+                  />
+                ))}
               </div>
 
               <div className="relative text-center text-white px-5">
-
-                <div className="text-4xl mb-4">
-                  ✦
-                </div>
+                <div className="text-4xl mb-4">✦</div>
 
                 <p className="text-[10px] tracking-[0.35em] uppercase">
                   Scratch to reveal
@@ -588,9 +555,7 @@ function DateReveal({
                 </p>
 
                 <div className="mt-6 mx-auto w-20 h-px bg-white/50" />
-
               </div>
-
             </motion.div>
 
             {/* SCRATCH PROGRESS */}
@@ -606,7 +571,6 @@ function DateReveal({
                 className="absolute bottom-0 left-0 h-1 bg-[#17463d] origin-left w-full"
               />
             )}
-
           </div>
 
           {!revealed && (
@@ -637,11 +601,8 @@ function DateReveal({
               The countdown has begun
             </motion.p>
           )}
-
         </div>
-
       </div>
-
     </section>
   );
 }
@@ -651,26 +612,17 @@ function DateReveal({
 ========================================================= */
 
 export default function WeddingSite() {
+  const [invitationOpen, setInvitationOpen] =
+    useState(false);
 
-  const [
-    invitationOpen,
-    setInvitationOpen,
-  ] = useState(false);
+  const [selectedSide, setSelectedSide] =
+    useState<Side>("groom");
 
-  const [
-    selectedSide,
-    setSelectedSide,
-  ] = useState<Side>("groom");
+  const [dateRevealed, setDateRevealed] =
+    useState(false);
 
-  const [
-    dateRevealed,
-    setDateRevealed,
-  ] = useState(false);
-
-  const [
-    musicPlaying,
-    setMusicPlaying,
-  ] = useState(false);
+  const [musicPlaying, setMusicPlaying] =
+    useState(false);
 
   const audioRef =
     useRef<HTMLAudioElement | null>(null);
@@ -679,21 +631,15 @@ export default function WeddingSite() {
      OPEN INVITATION
   ======================================================= */
 
-  const openInvitation = (
-    side: Side
-  ) => {
-
+  const openInvitation = (side: Side) => {
     setSelectedSide(side);
     setInvitationOpen(true);
 
-    const audio =
-      audioRef.current;
+    const audio = audioRef.current;
 
     if (!audio) return;
 
-    audio.currentTime =
-      MUSIC_START;
-
+    audio.currentTime = MUSIC_START;
     audio.volume = 0.35;
 
     audio
@@ -711,9 +657,7 @@ export default function WeddingSite() {
   ======================================================= */
 
   const toggleMusic = () => {
-
-    const audio =
-      audioRef.current;
+    const audio = audioRef.current;
 
     if (!audio) return;
 
@@ -742,7 +686,6 @@ export default function WeddingSite() {
 
   return (
     <main className="overflow-hidden">
-
       {/* AUDIO */}
 
       <audio
@@ -791,9 +734,7 @@ export default function WeddingSite() {
       {/* NAVIGATION */}
 
       <header className="fixed top-0 left-0 right-0 z-40 bg-[#f5eee2]/90 backdrop-blur border-b border-[#17463d]/10">
-
         <nav className="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
-
           <a
             href="#home"
             className="font-display text-2xl text-[#17463d]"
@@ -806,7 +747,6 @@ export default function WeddingSite() {
           </a>
 
           <div className="hidden md:flex gap-8 text-[10px] tracking-[0.25em] uppercase text-[#17463d]">
-
             <a
               href="#story"
               className="hover:text-[#b9975b] transition"
@@ -848,7 +788,6 @@ export default function WeddingSite() {
             >
               RSVP
             </a>
-
           </div>
 
           <a
@@ -857,9 +796,7 @@ export default function WeddingSite() {
           >
             RSVP
           </a>
-
         </nav>
-
       </header>
 
       {/* HERO */}
@@ -868,7 +805,6 @@ export default function WeddingSite() {
         id="home"
         className="min-h-screen flex items-center justify-center pt-16 bg-[#f5eee2]"
       >
-
         <motion.div
           initial={{
             opacity: 0,
@@ -883,13 +819,11 @@ export default function WeddingSite() {
           }}
           className="text-center px-5"
         >
-
           <p className="text-[10px] tracking-[0.45em] uppercase text-[#b9975b] mb-10">
             With the blessings of our families
           </p>
 
           <h1 className="font-display text-[80px] sm:text-[145px] leading-[0.75] text-[#17463d]">
-
             Harit
 
             <span className="block text-5xl sm:text-7xl my-7 text-[#b9975b]">
@@ -897,7 +831,6 @@ export default function WeddingSite() {
             </span>
 
             Shreya
-
           </h1>
 
           <p className="font-display text-2xl sm:text-3xl mt-12 text-[#17463d]">
@@ -907,9 +840,7 @@ export default function WeddingSite() {
           <p className="tracking-[0.35em] text-[10px] uppercase text-[#17463d]/60 mt-5">
             Ambala · Pathankot
           </p>
-
         </motion.div>
-
       </section>
 
       {/* DATE REVEAL */}
@@ -935,9 +866,7 @@ export default function WeddingSite() {
           }}
           className="py-24 bg-[#17463d] text-white"
         >
-
           <div className="max-w-5xl mx-auto px-5 text-center">
-
             <p className="text-[10px] tracking-[0.4em] uppercase text-[#d5b56a] mb-6">
               Counting every moment
             </p>
@@ -947,9 +876,7 @@ export default function WeddingSite() {
             </h2>
 
             <Countdown />
-
           </div>
-
         </motion.section>
       )}
 
@@ -959,9 +886,7 @@ export default function WeddingSite() {
         id="story"
         className="py-24 bg-[#f5eee2]"
       >
-
         <div className="max-w-4xl mx-auto px-5">
-
           <SectionTitle
             eyebrow="A little bit of us"
             title="Our Story"
@@ -984,7 +909,6 @@ export default function WeddingSite() {
             }}
             className="text-center font-display text-2xl sm:text-3xl leading-relaxed text-[#17463d]/80"
           >
-
             <p>
               It all started with two
               people, two stories, and a
@@ -1005,11 +929,8 @@ export default function WeddingSite() {
               we are ready to begin our
               next chapter.
             </p>
-
           </motion.div>
-
         </div>
-
       </section>
 
       {/* EVENTS */}
@@ -1018,9 +939,7 @@ export default function WeddingSite() {
         id="celebrations"
         className="py-24 bg-[#eee3d2]"
       >
-
         <div className="max-w-6xl mx-auto px-5">
-
           <SectionTitle
             eyebrow={
               selectedSide === "groom"
@@ -1031,10 +950,8 @@ export default function WeddingSite() {
           />
 
           <div className="grid md:grid-cols-2 gap-6">
-
             {currentEvents.map(
               (event, index) => (
-
                 <motion.article
                   key={`${event.title}-${index}`}
                   initial={{
@@ -1057,7 +974,6 @@ export default function WeddingSite() {
                   }}
                   className="relative bg-[#f5eee2] border border-[#b9975b]/40 p-8 sm:p-10 shadow-sm hover:shadow-lg transition-shadow"
                 >
-
                   <div className="absolute top-0 left-0 right-0 h-1 bg-[#17463d]" />
 
                   <p className="text-[10px] tracking-[0.35em] text-[#b9975b]">
@@ -1096,16 +1012,11 @@ export default function WeddingSite() {
                   >
                     View location →
                   </a>
-
                 </motion.article>
-
               )
             )}
-
           </div>
-
         </div>
-
       </section>
 
       {/* GALLERY */}
@@ -1114,19 +1025,15 @@ export default function WeddingSite() {
         id="gallery"
         className="py-24 bg-[#f5eee2]"
       >
-
         <div className="max-w-6xl mx-auto px-5">
-
           <SectionTitle
             eyebrow="Our moments"
             title="Gallery"
           />
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-
             {gallery.map(
               (photo, index) => (
-
                 <motion.div
                   key={photo.src}
                   initial={{
@@ -1146,22 +1053,16 @@ export default function WeddingSite() {
                   }}
                   className="overflow-hidden"
                 >
-
                   <img
                     src={photo.src}
                     alt={photo.alt}
                     className="w-full h-[280px] sm:h-[410px] object-cover hover:scale-105 transition duration-700"
                   />
-
                 </motion.div>
-
               )
             )}
-
           </div>
-
         </div>
-
       </section>
 
       {/* FAMILY */}
@@ -1170,18 +1071,14 @@ export default function WeddingSite() {
         id="family"
         className="py-24 bg-[#eee3d2]"
       >
-
         <div className="max-w-5xl mx-auto px-5 text-center">
-
           <SectionTitle
             eyebrow="With love and blessings"
             title="Our Families"
           />
 
           <div className="grid md:grid-cols-2 gap-7">
-
             <div className="border border-[#b9975b]/40 bg-[#f5eee2] p-10">
-
               <p className="text-[10px] tracking-[0.35em] uppercase text-[#b9975b]">
                 The Groom
               </p>
@@ -1197,11 +1094,9 @@ export default function WeddingSite() {
               <p className="text-sm mt-2 text-[#17463d]">
                 Yogesh Sharma &amp; Manju
               </p>
-
             </div>
 
             <div className="border border-[#b9975b]/40 bg-[#f5eee2] p-10">
-
               <p className="text-[10px] tracking-[0.35em] uppercase text-[#b9975b]">
                 The Bride
               </p>
@@ -1217,13 +1112,9 @@ export default function WeddingSite() {
               <p className="text-sm mt-2 text-[#17463d]">
                 Satish Kumar &amp; Davina
               </p>
-
             </div>
-
           </div>
-
         </div>
-
       </section>
 
       {/* TRAVEL */}
@@ -1232,18 +1123,14 @@ export default function WeddingSite() {
         id="travel"
         className="py-24 bg-[#f5eee2]"
       >
-
         <div className="max-w-5xl mx-auto px-5">
-
           <SectionTitle
             eyebrow="For our guests"
             title="Travel & Stay"
           />
 
           <div className="grid md:grid-cols-2 gap-7">
-
             <div className="border border-[#b9975b]/40 p-9 bg-[#eee3d2]/40">
-
               <p className="text-[10px] tracking-[0.3em] uppercase text-[#b9975b]">
                 Pre-Wedding
               </p>
@@ -1257,11 +1144,9 @@ export default function WeddingSite() {
                 wedding will take place in
                 Ambala City.
               </p>
-
             </div>
 
             <div className="border border-[#b9975b]/40 p-9 bg-[#eee3d2]/40">
-
               <p className="text-[10px] tracking-[0.3em] uppercase text-[#b9975b]">
                 Wedding
               </p>
@@ -1283,13 +1168,9 @@ export default function WeddingSite() {
               >
                 Wedding venue →
               </a>
-
             </div>
-
           </div>
-
         </div>
-
       </section>
 
       {/* RSVP */}
@@ -1298,9 +1179,7 @@ export default function WeddingSite() {
         id="rsvp"
         className="py-24 bg-[#17463d] text-white"
       >
-
         <div className="max-w-2xl mx-auto px-5 text-center">
-
           <p className="text-[10px] tracking-[0.4em] uppercase text-[#d5b56a]">
             We'd love to celebrate with you
           </p>
@@ -1323,15 +1202,12 @@ export default function WeddingSite() {
           >
             RSVP Coming Soon
           </button>
-
         </div>
-
       </section>
 
       {/* FOOTER */}
 
       <footer className="bg-[#092a24] text-white text-center py-16 px-5">
-
         <p className="font-display text-6xl text-[#d5b56a]">
           H{" "}
           <span className="text-white">
@@ -1351,10 +1227,7 @@ export default function WeddingSite() {
         <p className="text-xs text-white/30 mt-10">
           Made with love.
         </p>
-
       </footer>
-
     </main>
   );
 }
-```
