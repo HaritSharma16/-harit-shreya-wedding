@@ -1,7 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+  type TouchEvent,
+} from "react";
+
+import {
+  motion,
+  AnimatePresence,
+} from "framer-motion";
 
 /* =========================================================
    TYPES
@@ -243,16 +253,16 @@ function OpeningCurtain({
     useState(false);
 
   const handleReveal = () => {
-  if (opening || !selectedSide) return;
+    if (opening || !selectedSide) return;
 
-  const side = selectedSide;
+    const side = selectedSide;
 
-  setOpening(true);
+    setOpening(true);
 
-  window.setTimeout(() => {
-    onOpen(side);
-  }, 1700);
-};
+    window.setTimeout(() => {
+      onOpen(side);
+    }, 1700);
+  };
 
   return (
     <div className="fixed inset-0 z-[9999] overflow-hidden bg-[#f5eee2]">
@@ -292,23 +302,24 @@ function OpeningCurtain({
           >
             ✦
           </motion.div>
-        <p className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-black/70 font-semibold mt-16 sm:mt-20">
-  With the blessings of our families
-</p>
 
-<h1 className="font-display text-[65px] sm:text-[105px] leading-[0.75] text-black mt-8">
-  Harit
+          <p className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-black/70 font-semibold mt-16 sm:mt-20">
+            With the blessings of our families
+          </p>
 
-  <span className="block text-4xl sm:text-6xl text-black my-6">
-    &
-  </span>
+          <h1 className="font-display text-[65px] sm:text-[105px] leading-[0.75] text-black mt-8">
+            Harit
 
-  Shreya
-</h1>
+            <span className="block text-4xl sm:text-6xl text-black my-6">
+              &
+            </span>
 
-<p className="font-display text-xl sm:text-2xl text-black/70 mt-9 font-semibold">
-  A celebration of two families
-</p>
+            Shreya
+          </h1>
+
+          <p className="font-display text-xl sm:text-2xl text-black/70 mt-9 font-semibold">
+            A celebration of two families
+          </p>
 
           {/* SIDE SELECTION */}
 
@@ -328,7 +339,7 @@ function OpeningCurtain({
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "groom"
                     ? "bg-[#b9975b] text-white border-[#17463d]"
-                    : "bg-[#17463d] border-[#b9975b] text-black"
+                    : "bg-[#17463d] border-[#b9975b] text-white"
                 }`}
               >
                 Groom&apos;s Side
@@ -342,7 +353,7 @@ function OpeningCurtain({
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "bride"
                     ? "bg-[#b9975b] text-white border-[#17463d]"
-                    : "bg-[#17463d] border-[#b9975b] text-black"
+                    : "bg-[#17463d] border-[#b9975b] text-white"
                 }`}
               >
                 Bride&apos;s Side
@@ -358,12 +369,18 @@ function OpeningCurtain({
             onClick={handleReveal}
             disabled={opening || !selectedSide}
             whileHover={{
-              scale: opening ? 1 : 1.04,
+              scale:
+                opening || !selectedSide
+                  ? 1
+                  : 1.04,
             }}
             whileTap={{
-              scale: opening ? 1 : 0.96,
+              scale:
+                opening || !selectedSide
+                  ? 1
+                  : 0.96,
             }}
-            className="mt-9 px-10 py-4 bg-[#b9975b] text-white border border-[#b9975b] text-[10px] tracking-[0.35em] uppercase shadow-lg cursor-pointer disabled:cursor-default"
+            className="mt-9 px-10 py-4 bg-[#b9975b] text-white border border-[#b9975b] text-[10px] tracking-[0.35em] uppercase shadow-lg cursor-pointer disabled:cursor-default disabled:opacity-60"
           >
             {opening
               ? "Opening..."
@@ -379,8 +396,6 @@ function OpeningCurtain({
 
       {/* =====================================================
           LEFT CURTAIN
-          IMPORTANT: pointer-events-none
-          so it doesn't block the reveal button
       ===================================================== */}
 
       <motion.div
@@ -427,7 +442,6 @@ function OpeningCurtain({
 
       {/* =====================================================
           RIGHT CURTAIN
-          IMPORTANT: pointer-events-none
       ===================================================== */}
 
       <motion.div
@@ -511,7 +525,7 @@ function OpeningCurtain({
 }
 
 /* =========================================================
-   DATE REVEAL
+   DATE REVEAL - REAL SCRATCH CARD
 ========================================================= */
 
 function DateReveal({
@@ -519,62 +533,98 @@ function DateReveal({
 }: {
   onReveal: () => void;
 }) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef =
+    useRef<HTMLCanvasElement | null>(null);
 
-  const [revealed, setRevealed] = useState(false);
-  const [celebration, setCelebration] = useState(false);
-  const [scratchPercent, setScratchPercent] = useState(0);
+  const [revealed, setRevealed] =
+    useState(false);
 
-  const isScratching = useRef(false);
-  const celebrationShown = useRef(false);
-  const revealTriggered = useRef(false);
+  const [celebration, setCelebration] =
+    useState(false);
 
-  /* =========================================================
+  const [scratchPercent, setScratchPercent] =
+    useState(0);
+
+  const isScratching =
+    useRef(false);
+
+  const celebrationShown =
+    useRef(false);
+
+  const revealTriggered =
+    useRef(false);
+
+  /* =======================================================
      CANVAS SETUP
-  ========================================================= */
+  ======================================================= */
 
   useEffect(() => {
     const canvas = canvasRef.current;
 
     if (!canvas) return;
 
-    const container = canvas.parentElement;
+    const container =
+      canvas.parentElement;
 
     if (!container) return;
 
-    const rect = container.getBoundingClientRect();
+    const rect =
+      container.getBoundingClientRect();
 
-    const dpr = window.devicePixelRatio || 1;
+    const dpr =
+      window.devicePixelRatio || 1;
 
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+    canvas.width =
+      rect.width * dpr;
 
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
+    canvas.height =
+      rect.height * dpr;
 
-    const ctx = canvas.getContext("2d");
+    canvas.style.width =
+      `${rect.width}px`;
+
+    canvas.style.height =
+      `${rect.height}px`;
+
+    const ctx =
+      canvas.getContext("2d");
 
     if (!ctx) return;
 
     ctx.scale(dpr, dpr);
 
-    /* =======================================================
-       GOLD SCRATCH SURFACE
-    ======================================================= */
+    /* GOLD SCRATCH SURFACE */
 
-    const gradient = ctx.createLinearGradient(
+    const gradient =
+      ctx.createLinearGradient(
+        0,
+        0,
+        rect.width,
+        rect.height
+      );
+
+    gradient.addColorStop(
       0,
-      0,
-      rect.width,
-      rect.height
+      "#b9975b"
     );
 
-    gradient.addColorStop(0, "#b9975b");
-    gradient.addColorStop(0.35, "#d4b979");
-    gradient.addColorStop(0.65, "#9d7c42");
-    gradient.addColorStop(1, "#c6a85f");
+    gradient.addColorStop(
+      0.35,
+      "#d4b979"
+    );
 
-    ctx.fillStyle = gradient;
+    gradient.addColorStop(
+      0.65,
+      "#9d7c42"
+    );
+
+    gradient.addColorStop(
+      1,
+      "#c6a85f"
+    );
+
+    ctx.fillStyle =
+      gradient;
 
     ctx.fillRect(
       0,
@@ -583,13 +633,14 @@ function DateReveal({
       rect.height
     );
 
-    /* =======================================================
-       GOLD TEXTURE
-    ======================================================= */
+    /* GOLD TEXTURE */
 
     for (let i = 0; i < 100; i++) {
-      const x = Math.random() * rect.width;
-      const y = Math.random() * rect.height;
+      const x =
+        Math.random() * rect.width;
+
+      const y =
+        Math.random() * rect.height;
 
       ctx.beginPath();
 
@@ -601,22 +652,33 @@ function DateReveal({
         Math.PI * 2
       );
 
-      ctx.fillStyle = "rgba(255,255,255,0.18)";
+      ctx.fillStyle =
+        "rgba(255,255,255,0.18)";
 
       ctx.fill();
     }
+
+    return () => {
+      ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+    };
   }, []);
 
-  /* =========================================================
+  /* =======================================================
      GET POINTER POSITION
-  ========================================================= */
+  ======================================================= */
 
   const getPosition = (
     event:
-      | React.MouseEvent<HTMLCanvasElement>
-      | React.TouchEvent<HTMLCanvasElement>
+      | MouseEvent<HTMLCanvasElement>
+      | TouchEvent<HTMLCanvasElement>
   ) => {
-    const canvas = canvasRef.current;
+    const canvas =
+      canvasRef.current;
 
     if (!canvas) {
       return {
@@ -625,7 +687,8 @@ function DateReveal({
       };
     }
 
-    const rect = canvas.getBoundingClientRect();
+    const rect =
+      canvas.getBoundingClientRect();
 
     let clientX = 0;
     let clientY = 0;
@@ -642,142 +705,157 @@ function DateReveal({
         };
       }
 
-      clientX = touch.clientX;
-      clientY = touch.clientY;
+      clientX =
+        touch.clientX;
+
+      clientY =
+        touch.clientY;
     } else {
-      clientX = event.clientX;
-      clientY = event.clientY;
+      clientX =
+        event.clientX;
+
+      clientY =
+        event.clientY;
     }
 
     return {
-      x: clientX - rect.left,
-      y: clientY - rect.top,
+      x:
+        clientX -
+        rect.left,
+
+      y:
+        clientY -
+        rect.top,
     };
   };
 
-  /* =========================================================
-     CALCULATE SCRATCHED AREA
-  ========================================================= */
+  /* =======================================================
+     CALCULATE SCRATCH PERCENT
+  ======================================================= */
 
-  const calculateScratchPercent = () => {
-    const canvas = canvasRef.current;
+  const calculateScratchPercent =
+    () => {
+      const canvas =
+        canvasRef.current;
 
-    if (!canvas) return;
+      if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+      const ctx =
+        canvas.getContext("2d");
 
-    if (!ctx) return;
+      if (!ctx) return;
 
-    const width = canvas.width;
-    const height = canvas.height;
+      const width =
+        canvas.width;
 
-    const imageData = ctx.getImageData(
-      0,
-      0,
-      width,
-      height
-    );
+      const height =
+        canvas.height;
 
-    const pixels = imageData.data;
+      const imageData =
+        ctx.getImageData(
+          0,
+          0,
+          width,
+          height
+        );
 
-    let transparentPixels = 0;
+      const pixels =
+        imageData.data;
 
-    /*
-      Check every few pixels instead of every pixel
-      for better mobile performance.
-    */
+      let transparentPixels =
+        0;
 
-    const step = 8;
+      const step = 8;
 
-    for (
-      let i = 3;
-      i < pixels.length;
-      i += 4 * step
-    ) {
-      if (pixels[i] < 100) {
-        transparentPixels++;
+      for (
+        let i = 3;
+        i < pixels.length;
+        i += 4 * step
+      ) {
+        if (pixels[i] < 100) {
+          transparentPixels++;
+        }
       }
-    }
 
-    const totalPixels =
-      pixels.length / (4 * step);
+      const totalPixels =
+        pixels.length /
+        (4 * step);
 
-    const percent =
-      (transparentPixels / totalPixels) * 100;
+      const percent =
+        (transparentPixels /
+          totalPixels) *
+        100;
 
-    const roundedPercent = Math.min(
-      Math.round(percent),
-      100
-    );
+      const roundedPercent =
+        Math.min(
+          Math.round(percent),
+          100
+        );
 
-    setScratchPercent(
-      roundedPercent
-    );
+      setScratchPercent(
+        roundedPercent
+      );
 
-    /* =======================================================
-       CELEBRATION
-    ======================================================= */
+      /* CELEBRATION */
 
-    if (
-      roundedPercent >= 25 &&
-      !celebrationShown.current
-    ) {
-      celebrationShown.current = true;
+      if (
+        roundedPercent >= 25 &&
+        !celebrationShown.current
+      ) {
+        celebrationShown.current =
+          true;
 
-      setCelebration(true);
+        setCelebration(true);
 
-      window.setTimeout(() => {
-        setCelebration(false);
-      }, 1800);
-    }
+        window.setTimeout(() => {
+          setCelebration(false);
+        }, 1800);
+      }
 
-    /* =======================================================
-       AUTO REVEAL
-    ======================================================= */
+      /* AUTO REVEAL */
 
-    if (
-      roundedPercent >= 55 &&
-      !revealTriggered.current
-    ) {
-      revealTriggered.current = true;
+      if (
+        roundedPercent >= 55 &&
+        !revealTriggered.current
+      ) {
+        revealTriggered.current =
+          true;
 
-      setRevealed(true);
+        setRevealed(true);
 
-      window.setTimeout(() => {
-        onReveal();
-      }, 500);
-    }
-  };
+        window.setTimeout(() => {
+          onReveal();
+        }, 500);
+      }
+    };
 
-  /* =========================================================
+  /* =======================================================
      SCRATCH
-  ========================================================= */
+  ======================================================= */
 
   const scratch = (
     event:
-      | React.MouseEvent<HTMLCanvasElement>
-      | React.TouchEvent<HTMLCanvasElement>
+      | MouseEvent<HTMLCanvasElement>
+      | TouchEvent<HTMLCanvasElement>
   ) => {
     if (revealed) return;
 
     if (!isScratching.current) return;
 
-    const canvas = canvasRef.current;
+    const canvas =
+      canvasRef.current;
 
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx =
+      canvas.getContext("2d");
 
     if (!ctx) return;
 
-    const { x, y } =
-      getPosition(event);
-
-    /*
-      Erase a reasonably large circular area.
-      This makes the interaction feel like a real
-      scratch card rather than tiny pixel erasing.
-    */
+    const {
+      x,
+      y,
+    } = getPosition(event);
 
     ctx.globalCompositeOperation =
       "destination-out";
@@ -794,51 +872,36 @@ function DateReveal({
 
     ctx.fill();
 
-    /*
-      Draw another slightly smaller circle
-      for smoother scratch edges.
-    */
-
-    ctx.beginPath();
-
-    ctx.arc(
-      x,
-      y,
-      20,
-      0,
-      Math.PI * 2
-    );
-
-    ctx.fill();
-
     ctx.globalCompositeOperation =
       "source-over";
 
     calculateScratchPercent();
   };
 
-  /* =========================================================
+  /* =======================================================
      START SCRATCH
-  ========================================================= */
+  ======================================================= */
 
   const startScratch = (
     event:
-      | React.MouseEvent<HTMLCanvasElement>
-      | React.TouchEvent<HTMLCanvasElement>
+      | MouseEvent<HTMLCanvasElement>
+      | TouchEvent<HTMLCanvasElement>
   ) => {
     if (revealed) return;
 
-    isScratching.current = true;
+    isScratching.current =
+      true;
 
     scratch(event);
   };
 
-  /* =========================================================
+  /* =======================================================
      STOP SCRATCH
-  ========================================================= */
+  ======================================================= */
 
   const stopScratch = () => {
-    isScratching.current = false;
+    isScratching.current =
+      false;
   };
 
   return (
@@ -846,9 +909,7 @@ function DateReveal({
 
       <div className="max-w-3xl mx-auto px-5 text-center">
 
-        {/* ===================================================
-            HEADING
-        =================================================== */}
+        {/* HEADING */}
 
         <p className="text-[10px] tracking-[0.4em] uppercase text-[#b9975b]">
           A little secret
@@ -864,9 +925,7 @@ function DateReveal({
           Scratch the card to discover our wedding date.
         </p>
 
-        {/* ===================================================
-            SCRATCH CARD
-        =================================================== */}
+        {/* SCRATCH CARD */}
 
         <div className="mt-10 mx-auto max-w-md">
 
@@ -877,9 +936,7 @@ function DateReveal({
             }}
           >
 
-            {/* =================================================
-                ACTUAL DATE
-            ================================================= */}
+            {/* ACTUAL DATE */}
 
             <div className="absolute inset-0 flex items-center justify-center">
 
@@ -901,28 +958,40 @@ function DateReveal({
 
             </div>
 
-            {/* =================================================
-                SCRATCH CANVAS
-            ================================================= */}
+            {/* SCRATCH CANVAS */}
 
             {!revealed && (
               <canvas
                 ref={canvasRef}
-                onMouseDown={startScratch}
-                onMouseMove={scratch}
-                onMouseUp={stopScratch}
-                onMouseLeave={stopScratch}
-                onTouchStart={startScratch}
-                onTouchMove={scratch}
-                onTouchEnd={stopScratch}
-                onTouchCancel={stopScratch}
+                onMouseDown={
+                  startScratch
+                }
+                onMouseMove={
+                  scratch
+                }
+                onMouseUp={
+                  stopScratch
+                }
+                onMouseLeave={
+                  stopScratch
+                }
+                onTouchStart={
+                  startScratch
+                }
+                onTouchMove={
+                  scratch
+                }
+                onTouchEnd={
+                  stopScratch
+                }
+                onTouchCancel={
+                  stopScratch
+                }
                 className="absolute inset-0 w-full h-full cursor-pointer"
               />
             )}
 
-            {/* =================================================
-                SCRATCH INSTRUCTION
-            ================================================= */}
+            {/* SCRATCH INSTRUCTION */}
 
             {!revealed &&
               scratchPercent < 8 && (
@@ -949,9 +1018,7 @@ function DateReveal({
                 </div>
               )}
 
-            {/* =================================================
-                CELEBRATION
-            ================================================= */}
+            {/* CELEBRATION */}
 
             <AnimatePresence>
               {celebration && (
@@ -982,7 +1049,12 @@ function DateReveal({
                     <motion.span
                       animate={{
                         y: [0, -15, 0],
-                        rotate: [0, -10, 10, 0],
+                        rotate: [
+                          0,
+                          -10,
+                          10,
+                          0,
+                        ],
                       }}
                       transition={{
                         duration: 0.8,
@@ -995,7 +1067,12 @@ function DateReveal({
                     <motion.span
                       animate={{
                         y: [0, -20, 0],
-                        rotate: [0, 15, -15, 0],
+                        rotate: [
+                          0,
+                          15,
+                          -15,
+                          0,
+                        ],
                       }}
                       transition={{
                         duration: 0.8,
@@ -1009,7 +1086,12 @@ function DateReveal({
                     <motion.span
                       animate={{
                         y: [0, -15, 0],
-                        rotate: [0, -10, 10, 0],
+                        rotate: [
+                          0,
+                          -10,
+                          10,
+                          0,
+                        ],
                       }}
                       transition={{
                         duration: 0.8,
@@ -1026,9 +1108,7 @@ function DateReveal({
               )}
             </AnimatePresence>
 
-            {/* =================================================
-                SCRATCH PROGRESS
-            ================================================= */}
+            {/* SCRATCH PROGRESS */}
 
             {!revealed &&
               scratchPercent > 5 && (
@@ -1046,27 +1126,24 @@ function DateReveal({
 
           </div>
 
-          {/* ===================================================
-              SCRATCH STATUS
-          =================================================== */}
+          {/* SCRATCH STATUS */}
 
-          {!revealed && scratchPercent > 8 && (
-            <motion.p
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              className="mt-6 text-[9px] tracking-[0.3em] uppercase text-[#17463d]/50"
-            >
-              Keep scratching... {scratchPercent}%
-            </motion.p>
-          )}
+          {!revealed &&
+            scratchPercent > 8 && (
+              <motion.p
+                initial={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                className="mt-6 text-[9px] tracking-[0.3em] uppercase text-[#17463d]/50"
+              >
+                Keep scratching...
+              </motion.p>
+            )}
 
-          {/* ===================================================
-              REVEALED MESSAGE
-          =================================================== */}
+          {/* REVEALED MESSAGE */}
 
           {revealed && (
             <motion.div
@@ -1100,161 +1177,6 @@ function DateReveal({
   );
 }
 
-  return (
-    <section className="py-24 bg-[#eee3d2]">
-
-      <div className="max-w-3xl mx-auto px-5 text-center">
-
-        <p className="text-[10px] tracking-[0.4em] uppercase text-[#b9975b]">
-          A little secret
-        </p>
-
-        <h2 className="font-display text-5xl sm:text-6xl text-[#17463d] mt-4">
-          When is the big day?
-        </h2>
-
-        <div className="w-16 h-px bg-[#b9975b] mx-auto mt-6" />
-
-        <p className="text-sm text-[#17463d]/60 mt-7">
-          Some dates are meant to be discovered.
-        </p>
-
-        <div className="mt-10 mx-auto max-w-md">
-
-          <div
-            className="relative h-52 sm:h-60 border border-[#b9975b]/50 bg-[#f5eee2] overflow-hidden cursor-pointer shadow-lg"
-            onClick={revealDate}
-          >
-
-            {/* ACTUAL DATE */}
-
-            <div className="absolute inset-0 flex items-center justify-center">
-
-              <div>
-
-                <p className="text-[9px] tracking-[0.4em] uppercase text-[#b9975b]">
-                  Save the date
-                </p>
-
-                <p className="font-display text-5xl sm:text-6xl text-[#17463d] mt-5">
-                  12 November
-                </p>
-
-                <p className="tracking-[0.4em] text-xs text-[#17463d]/60 mt-3">
-                  2026
-                </p>
-
-              </div>
-
-            </div>
-
-            {/* SCRATCH LAYER */}
-
-            <motion.div
-              animate={{
-                opacity: revealed ? 0 : 1,
-              }}
-              transition={{
-                duration: 0.5,
-              }}
-              className="absolute inset-0 flex items-center justify-center"
-              style={{
-                background:
-                  "linear-gradient(135deg,#b9975b,#d4b979,#9d7c42,#c6a85f)",
-              }}
-            >
-
-              <div className="absolute inset-0 opacity-20">
-
-                {[...Array(80)].map(
-                  (_, index) => (
-                    <span
-                      key={index}
-                      className="absolute w-1 h-1 rounded-full bg-white"
-                      style={{
-                        left: `${(index * 37) % 100}%`,
-                        top: `${(index * 61) % 100}%`,
-                      }}
-                    />
-                  )
-                )}
-
-              </div>
-
-              <div className="relative text-center text-white px-5">
-
-                <div className="text-4xl mb-4">
-                  ✦
-                </div>
-
-                <p className="text-[10px] tracking-[0.35em] uppercase">
-                  Scratch to reveal
-                </p>
-
-                <p className="text-xs mt-3 text-white/70">
-                  Tap the card to reveal
-                </p>
-
-                <div className="mt-6 mx-auto w-20 h-px bg-white/50" />
-
-              </div>
-
-            </motion.div>
-
-            {/* SCRATCH PROGRESS */}
-
-            {!revealed &&
-              scratched > 0 && (
-                <motion.div
-                  initial={{
-                    scaleX: 0,
-                  }}
-                  animate={{
-                    scaleX: scratched / 100,
-                  }}
-                  className="absolute bottom-0 left-0 h-1 bg-[#17463d] origin-left w-full"
-                />
-              )}
-
-          </div>
-
-          {!revealed && (
-            <motion.button
-              type="button"
-              onClick={revealDate}
-              whileTap={{
-                scale: 0.96,
-              }}
-              className="mt-7 px-8 py-3 bg-[#17463d] text-white text-[10px] tracking-[0.3em] uppercase"
-            >
-              Reveal the Date
-            </motion.button>
-          )}
-
-          {revealed && (
-            <motion.p
-              initial={{
-                opacity: 0,
-                y: 10,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              className="mt-7 text-[10px] tracking-[0.3em] uppercase text-[#17463d]"
-            >
-              The countdown has begun
-            </motion.p>
-          )}
-
-        </div>
-
-      </div>
-
-    </section>
-  );
-}
-
 /* =========================================================
    MAIN WEBSITE
 ========================================================= */
@@ -1264,8 +1186,13 @@ export default function WeddingSite() {
   const [invitationOpen, setInvitationOpen] =
     useState(false);
 
+  /*
+    No default side.
+    User must choose Groom or Bride.
+  */
+
   const [selectedSide, setSelectedSide] =
-    useState<Side>("groom");
+    useState<Side | null>(null);
 
   const [dateRevealed, setDateRevealed] =
     useState(false);
@@ -1280,19 +1207,24 @@ export default function WeddingSite() {
      OPEN INVITATION
   ======================================================= */
 
-  const openInvitation = (side: Side) => {
+  const openInvitation = (
+    side: Side
+  ) => {
 
     setSelectedSide(side);
 
     setInvitationOpen(true);
 
-    const audio = audioRef.current;
+    const audio =
+      audioRef.current;
 
     if (!audio) return;
 
-    audio.currentTime = MUSIC_START;
+    audio.currentTime =
+      MUSIC_START;
 
-    audio.volume = 0.35;
+    audio.volume =
+      0.35;
 
     audio
       .play()
@@ -1310,7 +1242,8 @@ export default function WeddingSite() {
 
   const toggleMusic = () => {
 
-    const audio = audioRef.current;
+    const audio =
+      audioRef.current;
 
     if (!audio) return;
 
@@ -1338,7 +1271,20 @@ export default function WeddingSite() {
   const currentEvents =
     selectedSide === "groom"
       ? groomEvents
-      : brideEvents;
+      : selectedSide === "bride"
+        ? brideEvents
+        : [];
+
+  /* =======================================================
+     SIDE LABEL
+  ======================================================= */
+
+  const sideLabel =
+    selectedSide === "groom"
+      ? "Groom's side"
+      : selectedSide === "bride"
+        ? "Bride's side"
+        : "Our celebrations";
 
   return (
     <main className="overflow-hidden">
@@ -1390,7 +1336,9 @@ export default function WeddingSite() {
           aria-label="Toggle music"
           className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-[#17463d] text-white border border-[#b9975b] shadow-xl flex items-center justify-center"
         >
-          {musicPlaying ? "♫" : "🔇"}
+          {musicPlaying
+            ? "♫"
+            : "🔇"}
         </motion.button>
       )}
 
@@ -1640,85 +1588,92 @@ export default function WeddingSite() {
         <div className="max-w-6xl mx-auto px-5">
 
           <SectionTitle
-            eyebrow={
-              selectedSide === "groom"
-                ? "Groom's side"
-                : "Bride's side"
-            }
+            eyebrow={sideLabel}
             title="The Celebrations"
           />
 
-          <div className="grid md:grid-cols-2 gap-6">
+          {currentEvents.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-6">
 
-            {currentEvents.map(
-              (event, index) => (
-                <motion.article
-                  key={`${event.title}-${index}`}
-                  initial={{
-                    opacity: 0,
-                    y: 40,
-                  }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  viewport={{
-                    once: true,
-                  }}
-                  transition={{
-                    duration: 0.7,
-                    delay: index * 0.1,
-                  }}
-                  whileHover={{
-                    y: -5,
-                  }}
-                  className="relative bg-[#f5eee2] border border-[#b9975b]/40 p-8 sm:p-10 shadow-sm hover:shadow-lg transition-shadow"
-                >
-
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-[#17463d]" />
-
-                  <p className="text-[10px] tracking-[0.35em] text-[#b9975b]">
-                    {event.date}
-                  </p>
-
-                  <h3 className="font-display text-3xl sm:text-4xl text-[#17463d] mt-4">
-                    {event.title}
-                  </h3>
-
-                  {event.time && (
-                    <p className="text-sm text-[#b9975b] mt-3">
-                      {event.time}
-                    </p>
-                  )}
-
-                  <p className="text-xs tracking-[0.16em] uppercase text-[#17463d]/60 mt-4">
-                    {event.location}
-                  </p>
-
-                  {event.address && (
-                    <p className="text-sm leading-6 text-[#17463d]/60 mt-3">
-                      {event.address}
-                    </p>
-                  )}
-
-                  <p className="mt-5 text-sm leading-7 text-[#17463d]/70">
-                    {event.description}
-                  </p>
-
-                  <a
-                    href={event.map}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-block mt-7 text-[10px] tracking-[0.25em] uppercase text-[#17463d] border-b border-[#b9975b] pb-1"
+              {currentEvents.map(
+                (event, index) => (
+                  <motion.article
+                    key={`${event.title}-${index}`}
+                    initial={{
+                      opacity: 0,
+                      y: 40,
+                    }}
+                    whileInView={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    viewport={{
+                      once: true,
+                    }}
+                    transition={{
+                      duration: 0.7,
+                      delay:
+                        index * 0.1,
+                    }}
+                    whileHover={{
+                      y: -5,
+                    }}
+                    className="relative bg-[#f5eee2] border border-[#b9975b]/40 p-8 sm:p-10 shadow-sm hover:shadow-lg transition-shadow"
                   >
-                    View location →
-                  </a>
 
-                </motion.article>
-              )
-            )}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-[#17463d]" />
 
-          </div>
+                    <p className="text-[10px] tracking-[0.35em] text-[#b9975b]">
+                      {event.date}
+                    </p>
+
+                    <h3 className="font-display text-3xl sm:text-4xl text-[#17463d] mt-4">
+                      {event.title}
+                    </h3>
+
+                    {event.time && (
+                      <p className="text-sm text-[#b9975b] mt-3">
+                        {event.time}
+                      </p>
+                    )}
+
+                    <p className="text-xs tracking-[0.16em] uppercase text-[#17463d]/60 mt-4">
+                      {event.location}
+                    </p>
+
+                    {event.address && (
+                      <p className="text-sm leading-6 text-[#17463d]/60 mt-3">
+                        {event.address}
+                      </p>
+                    )}
+
+                    <p className="mt-5 text-sm leading-7 text-[#17463d]/70">
+                      {event.description}
+                    </p>
+
+                    <a
+                      href={event.map}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-block mt-7 text-[10px] tracking-[0.25em] uppercase text-[#17463d] border-b border-[#b9975b] pb-1"
+                    >
+                      View location →
+                    </a>
+
+                  </motion.article>
+                )
+              )}
+
+            </div>
+          ) : (
+            <div className="text-center py-10">
+
+              <p className="font-display text-2xl text-[#17463d]/60">
+                Choose your side from the invitation to see the celebrations.
+              </p>
+
+            </div>
+          )}
 
         </div>
 
@@ -1759,7 +1714,8 @@ export default function WeddingSite() {
                   }}
                   transition={{
                     duration: 0.8,
-                    delay: index * 0.1,
+                    delay:
+                      index * 0.1,
                   }}
                   className="overflow-hidden"
                 >
@@ -1924,7 +1880,7 @@ export default function WeddingSite() {
         <div className="max-w-2xl mx-auto px-5 text-center">
 
           <p className="text-[10px] tracking-[0.4em] uppercase text-[#d5b56a]">
-            We'd love to celebrate with you
+            We&apos;d love to celebrate with you
           </p>
 
           <h2 className="font-display text-5xl sm:text-6xl mt-4">
