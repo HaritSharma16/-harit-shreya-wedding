@@ -50,7 +50,8 @@ const groomEvents: WeddingEvent[] = [
     title: "Engagement",
     time: "7:00 PM onwards",
     location: "The Glen Manor · Ambala City",
-    map: "https://maps.app.goo.gl/sKmhU2aUPT4GBNPM7",
+    map:
+      "https://maps.app.goo.gl/sKmhU2aUPT4GBNPM7",
     description:
       "An evening of love, laughter and celebration as we officially begin this beautiful journey together.",
   },
@@ -67,7 +68,8 @@ const groomEvents: WeddingEvent[] = [
     date: "12 NOVEMBER 2026",
     title: "The Wedding",
     location: "Kamal White House · Pathankot",
-    map: "https://share.google/dW1Nnjn30UPZdNYky",
+    map:
+      "https://share.google/dW1Nnjn30UPZdNYky",
     description:
       "The day our forever begins. We cannot wait to celebrate this beautiful moment with you.",
   },
@@ -96,7 +98,8 @@ const brideEvents: WeddingEvent[] = [
     date: "12 NOVEMBER 2026",
     title: "The Wedding",
     location: "Kamal White House · Pathankot",
-    map: "https://share.google/dW1Nnjn30UPZdNYky",
+    map:
+      "https://share.google/dW1Nnjn30UPZdNYky",
     description:
       "The day our forever begins.",
   },
@@ -166,7 +169,10 @@ function Countdown() {
 
     update();
 
-    const timer = window.setInterval(update, 1000);
+    const timer = window.setInterval(
+      update,
+      1000
+    );
 
     return () => {
       window.clearInterval(timer);
@@ -175,20 +181,22 @@ function Countdown() {
 
   return (
     <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-2xl mx-auto">
-      {Object.entries(time).map(([label, value]) => (
-        <div
-          key={label}
-          className="border border-[#d5b56a]/40 bg-black/10 px-2 py-4 sm:px-6 sm:py-6"
-        >
-          <div className="font-display text-3xl sm:text-5xl text-[#d5b56a]">
-            {String(value).padStart(2, "0")}
-          </div>
+      {Object.entries(time).map(
+        ([label, value]) => (
+          <div
+            key={label}
+            className="border border-[#d5b56a]/40 bg-black/10 px-2 py-4 sm:px-6 sm:py-6"
+          >
+            <div className="font-display text-3xl sm:text-5xl text-[#d5b56a]">
+              {String(value).padStart(2, "0")}
+            </div>
 
-          <div className="text-[8px] sm:text-[9px] tracking-[0.25em] uppercase text-white/50 mt-2">
-            {label}
+            <div className="text-[8px] sm:text-[9px] tracking-[0.25em] uppercase text-white/50 mt-2">
+              {label}
+            </div>
           </div>
-        </div>
-      ))}
+        )
+      )}
     </div>
   );
 }
@@ -231,7 +239,8 @@ function OpeningCurtain({
   const [selectedSide, setSelectedSide] =
     useState<Side>("groom");
 
-  const [opening, setOpening] = useState(false);
+  const [opening, setOpening] =
+    useState(false);
 
   const handleReveal = () => {
     if (opening) return;
@@ -245,21 +254,29 @@ function OpeningCurtain({
 
   return (
     <div className="fixed inset-0 z-[9999] overflow-hidden bg-[#f5eee2]">
-      {/* CENTER BACKGROUND */}
+
+      {/* =====================================================
+          CENTER BACKGROUND
+      ===================================================== */}
 
       <div className="absolute inset-0 bg-[#f5eee2]" />
 
-      {/* CENTER INVITATION */}
+      {/* =====================================================
+          CENTER INVITATION
+      ===================================================== */}
 
       <motion.div
         initial={{ opacity: 1 }}
         animate={{
           opacity: opening ? 0 : 1,
         }}
-        transition={{ duration: 0.5 }}
-        className="absolute inset-0 z-10 flex items-center justify-center px-5"
+        transition={{
+          duration: 0.5,
+        }}
+        className="absolute inset-0 z-30 flex items-center justify-center px-5"
       >
         <div className="text-center w-full max-w-xl">
+
           <motion.div
             animate={{
               opacity: [0.5, 1, 0.5],
@@ -295,14 +312,18 @@ function OpeningCurtain({
           {/* SIDE SELECTION */}
 
           <div className="mt-10">
+
             <p className="text-[9px] tracking-[0.35em] uppercase text-[#17463d]/50 mb-5">
               Choose your side
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
+
               <button
                 type="button"
-                onClick={() => setSelectedSide("groom")}
+                onClick={() =>
+                  setSelectedSide("groom")
+                }
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "groom"
                     ? "bg-[#17463d] text-white border-[#17463d]"
@@ -314,7 +335,9 @@ function OpeningCurtain({
 
               <button
                 type="button"
-                onClick={() => setSelectedSide("bride")}
+                onClick={() =>
+                  setSelectedSide("bride")
+                }
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "bride"
                     ? "bg-[#17463d] text-white border-[#17463d]"
@@ -323,6 +346,7 @@ function OpeningCurtain({
               >
                 Bride&apos;s Side
               </button>
+
             </div>
           </div>
 
@@ -340,100 +364,130 @@ function OpeningCurtain({
             }}
             className="mt-9 px-10 py-4 bg-[#b9975b] text-white border border-[#b9975b] text-[10px] tracking-[0.35em] uppercase shadow-lg cursor-pointer disabled:cursor-default"
           >
-            {opening ? "Opening..." : "Tap to Reveal"}
+            {opening
+              ? "Opening..."
+              : "Tap to Reveal"}
           </motion.button>
 
           <p className="text-[8px] tracking-[0.3em] uppercase text-[#17463d]/35 mt-4">
             Your celebration awaits
           </p>
+
         </div>
       </motion.div>
 
-      {/* LEFT CURTAIN */}
+      {/* =====================================================
+          LEFT CURTAIN
+          IMPORTANT: pointer-events-none
+          so it doesn't block the reveal button
+      ===================================================== */}
 
       <motion.div
         initial={{
           x: "0%",
         }}
         animate={{
-          x: opening ? "-102%" : "0%",
+          x: opening
+            ? "-102%"
+            : "0%",
         }}
         transition={{
           duration: 1.7,
           ease: [0.76, 0, 0.24, 1],
         }}
-        className="absolute left-0 top-0 bottom-0 w-1/2 z-20 overflow-hidden"
+        className="absolute left-0 top-0 bottom-0 w-1/2 z-20 overflow-hidden pointer-events-none"
         style={{
           background:
             "linear-gradient(90deg,#061f1a 0%,#0c332b 20%,#17463d 48%,#0d362e 72%,#061f1a 100%)",
         }}
       >
-        {[...Array(12)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute top-0 bottom-0"
-            style={{
-              left: `${i * 9}%`,
-              width: "12%",
-              background:
-                "linear-gradient(90deg,rgba(0,0,0,.25),rgba(255,255,255,.07),rgba(0,0,0,.25))",
-              filter: "blur(0.5px)",
-            }}
-          />
-        ))}
+
+        {[...Array(12)].map(
+          (_, i) => (
+            <div
+              key={i}
+              className="absolute top-0 bottom-0"
+              style={{
+                left: `${i * 9}%`,
+                width: "12%",
+                background:
+                  "linear-gradient(90deg,rgba(0,0,0,.25),rgba(255,255,255,.07),rgba(0,0,0,.25))",
+                filter: "blur(0.5px)",
+              }}
+            />
+          )
+        )}
 
         <div className="absolute right-0 top-0 bottom-0 w-[4px] bg-[#b9975b]" />
 
         <div className="absolute right-[4px] top-0 bottom-0 w-px bg-[#ead7a7]/50" />
+
       </motion.div>
 
-      {/* RIGHT CURTAIN */}
+      {/* =====================================================
+          RIGHT CURTAIN
+          IMPORTANT: pointer-events-none
+      ===================================================== */}
 
       <motion.div
         initial={{
           x: "0%",
         }}
         animate={{
-          x: opening ? "102%" : "0%",
+          x: opening
+            ? "102%"
+            : "0%",
         }}
         transition={{
           duration: 1.7,
           ease: [0.76, 0, 0.24, 1],
         }}
-        className="absolute right-0 top-0 bottom-0 w-1/2 z-20 overflow-hidden"
+        className="absolute right-0 top-0 bottom-0 w-1/2 z-20 overflow-hidden pointer-events-none"
         style={{
           background:
             "linear-gradient(270deg,#061f1a 0%,#0c332b 20%,#17463d 48%,#0d362e 72%,#061f1a 100%)",
         }}
       >
-        {[...Array(12)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute top-0 bottom-0"
-            style={{
-              right: `${i * 9}%`,
-              width: "12%",
-              background:
-                "linear-gradient(90deg,rgba(0,0,0,.25),rgba(255,255,255,.07),rgba(0,0,0,.25))",
-              filter: "blur(0.5px)",
-            }}
-          />
-        ))}
+
+        {[...Array(12)].map(
+          (_, i) => (
+            <div
+              key={i}
+              className="absolute top-0 bottom-0"
+              style={{
+                right: `${i * 9}%`,
+                width: "12%",
+                background:
+                  "linear-gradient(90deg,rgba(0,0,0,.25),rgba(255,255,255,.07),rgba(0,0,0,.25))",
+                filter: "blur(0.5px)",
+              }}
+            />
+          )
+        )}
 
         <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#b9975b]" />
 
         <div className="absolute left-[4px] top-0 bottom-0 w-px bg-[#ead7a7]/50" />
+
       </motion.div>
 
-      {/* GOLD TOP ROD */}
+      {/* =====================================================
+          GOLD TOP ROD
+      ===================================================== */}
 
-      <div className="absolute top-0 left-0 right-0 z-30">
+      <div className="absolute top-0 left-0 right-0 z-40 pointer-events-none">
+
         <div className="h-[5px] bg-[#b9975b]" />
+
         <div className="h-[2px] bg-[#ead7a7]" />
+
         <div className="h-[4px] bg-[#765d31]" />
+
       </div>
 
-      {/* FRAME */}
+      {/* =====================================================
+          FRAME
+      ===================================================== */}
 
       <div className="absolute inset-5 sm:inset-8 border border-[#d5b56a]/40 z-40 pointer-events-none" />
 
@@ -446,8 +500,11 @@ function OpeningCurtain({
       </div>
 
       <div className="absolute bottom-7 left-0 right-0 z-40 text-center pointer-events-none">
-        <span className="text-[#b9975b]">✦</span>
+        <span className="text-[#b9975b]">
+          ✦
+        </span>
       </div>
+
     </div>
   );
 }
@@ -461,8 +518,11 @@ function DateReveal({
 }: {
   onReveal: () => void;
 }) {
-  const [revealed, setRevealed] = useState(false);
-  const [scratched, setScratched] = useState(0);
+  const [revealed, setRevealed] =
+    useState(false);
+
+  const [scratched, setScratched] =
+    useState(0);
 
   const revealDate = () => {
     if (revealed) return;
@@ -477,7 +537,9 @@ function DateReveal({
 
   return (
     <section className="py-24 bg-[#eee3d2]">
+
       <div className="max-w-3xl mx-auto px-5 text-center">
+
         <p className="text-[10px] tracking-[0.4em] uppercase text-[#b9975b]">
           A little secret
         </p>
@@ -493,14 +555,18 @@ function DateReveal({
         </p>
 
         <div className="mt-10 mx-auto max-w-md">
+
           <div
             className="relative h-52 sm:h-60 border border-[#b9975b]/50 bg-[#f5eee2] overflow-hidden cursor-pointer shadow-lg"
             onClick={revealDate}
           >
+
             {/* ACTUAL DATE */}
 
             <div className="absolute inset-0 flex items-center justify-center">
+
               <div>
+
                 <p className="text-[9px] tracking-[0.4em] uppercase text-[#b9975b]">
                   Save the date
                 </p>
@@ -512,7 +578,9 @@ function DateReveal({
                 <p className="tracking-[0.4em] text-xs text-[#17463d]/60 mt-3">
                   2026
                 </p>
+
               </div>
+
             </div>
 
             {/* SCRATCH LAYER */}
@@ -530,21 +598,29 @@ function DateReveal({
                   "linear-gradient(135deg,#b9975b,#d4b979,#9d7c42,#c6a85f)",
               }}
             >
+
               <div className="absolute inset-0 opacity-20">
-                {[...Array(80)].map((_, index) => (
-                  <span
-                    key={index}
-                    className="absolute w-1 h-1 rounded-full bg-white"
-                    style={{
-                      left: `${(index * 37) % 100}%`,
-                      top: `${(index * 61) % 100}%`,
-                    }}
-                  />
-                ))}
+
+                {[...Array(80)].map(
+                  (_, index) => (
+                    <span
+                      key={index}
+                      className="absolute w-1 h-1 rounded-full bg-white"
+                      style={{
+                        left: `${(index * 37) % 100}%`,
+                        top: `${(index * 61) % 100}%`,
+                      }}
+                    />
+                  )
+                )}
+
               </div>
 
               <div className="relative text-center text-white px-5">
-                <div className="text-4xl mb-4">✦</div>
+
+                <div className="text-4xl mb-4">
+                  ✦
+                </div>
 
                 <p className="text-[10px] tracking-[0.35em] uppercase">
                   Scratch to reveal
@@ -555,22 +631,26 @@ function DateReveal({
                 </p>
 
                 <div className="mt-6 mx-auto w-20 h-px bg-white/50" />
+
               </div>
+
             </motion.div>
 
             {/* SCRATCH PROGRESS */}
 
-            {!revealed && scratched > 0 && (
-              <motion.div
-                initial={{
-                  scaleX: 0,
-                }}
-                animate={{
-                  scaleX: scratched / 100,
-                }}
-                className="absolute bottom-0 left-0 h-1 bg-[#17463d] origin-left w-full"
-              />
-            )}
+            {!revealed &&
+              scratched > 0 && (
+                <motion.div
+                  initial={{
+                    scaleX: 0,
+                  }}
+                  animate={{
+                    scaleX: scratched / 100,
+                  }}
+                  className="absolute bottom-0 left-0 h-1 bg-[#17463d] origin-left w-full"
+                />
+              )}
+
           </div>
 
           {!revealed && (
@@ -601,8 +681,11 @@ function DateReveal({
               The countdown has begun
             </motion.p>
           )}
+
         </div>
+
       </div>
+
     </section>
   );
 }
@@ -612,6 +695,7 @@ function DateReveal({
 ========================================================= */
 
 export default function WeddingSite() {
+
   const [invitationOpen, setInvitationOpen] =
     useState(false);
 
@@ -632,7 +716,9 @@ export default function WeddingSite() {
   ======================================================= */
 
   const openInvitation = (side: Side) => {
+
     setSelectedSide(side);
+
     setInvitationOpen(true);
 
     const audio = audioRef.current;
@@ -640,6 +726,7 @@ export default function WeddingSite() {
     if (!audio) return;
 
     audio.currentTime = MUSIC_START;
+
     audio.volume = 0.35;
 
     audio
@@ -657,13 +744,17 @@ export default function WeddingSite() {
   ======================================================= */
 
   const toggleMusic = () => {
+
     const audio = audioRef.current;
 
     if (!audio) return;
 
     if (musicPlaying) {
+
       audio.pause();
+
       setMusicPlaying(false);
+
       return;
     }
 
@@ -686,7 +777,10 @@ export default function WeddingSite() {
 
   return (
     <main className="overflow-hidden">
-      {/* AUDIO */}
+
+      {/* =====================================================
+          AUDIO
+      ===================================================== */}
 
       <audio
         ref={audioRef}
@@ -695,7 +789,9 @@ export default function WeddingSite() {
         loop
       />
 
-      {/* OPENING */}
+      {/* =====================================================
+          OPENING
+      ===================================================== */}
 
       <AnimatePresence>
         {!invitationOpen && (
@@ -705,7 +801,9 @@ export default function WeddingSite() {
         )}
       </AnimatePresence>
 
-      {/* MUSIC BUTTON */}
+      {/* =====================================================
+          MUSIC BUTTON
+      ===================================================== */}
 
       {invitationOpen && (
         <motion.button
@@ -731,10 +829,14 @@ export default function WeddingSite() {
         </motion.button>
       )}
 
-      {/* NAVIGATION */}
+      {/* =====================================================
+          NAVIGATION
+      ===================================================== */}
 
       <header className="fixed top-0 left-0 right-0 z-40 bg-[#f5eee2]/90 backdrop-blur border-b border-[#17463d]/10">
+
         <nav className="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+
           <a
             href="#home"
             className="font-display text-2xl text-[#17463d]"
@@ -747,6 +849,7 @@ export default function WeddingSite() {
           </a>
 
           <div className="hidden md:flex gap-8 text-[10px] tracking-[0.25em] uppercase text-[#17463d]">
+
             <a
               href="#story"
               className="hover:text-[#b9975b] transition"
@@ -788,6 +891,7 @@ export default function WeddingSite() {
             >
               RSVP
             </a>
+
           </div>
 
           <a
@@ -796,15 +900,20 @@ export default function WeddingSite() {
           >
             RSVP
           </a>
+
         </nav>
+
       </header>
 
-      {/* HERO */}
+      {/* =====================================================
+          HERO
+      ===================================================== */}
 
       <section
         id="home"
         className="min-h-screen flex items-center justify-center pt-16 bg-[#f5eee2]"
       >
+
         <motion.div
           initial={{
             opacity: 0,
@@ -819,11 +928,13 @@ export default function WeddingSite() {
           }}
           className="text-center px-5"
         >
+
           <p className="text-[10px] tracking-[0.45em] uppercase text-[#b9975b] mb-10">
             With the blessings of our families
           </p>
 
           <h1 className="font-display text-[80px] sm:text-[145px] leading-[0.75] text-[#17463d]">
+
             Harit
 
             <span className="block text-5xl sm:text-7xl my-7 text-[#b9975b]">
@@ -831,6 +942,7 @@ export default function WeddingSite() {
             </span>
 
             Shreya
+
           </h1>
 
           <p className="font-display text-2xl sm:text-3xl mt-12 text-[#17463d]">
@@ -840,10 +952,14 @@ export default function WeddingSite() {
           <p className="tracking-[0.35em] text-[10px] uppercase text-[#17463d]/60 mt-5">
             Ambala · Pathankot
           </p>
+
         </motion.div>
+
       </section>
 
-      {/* DATE REVEAL */}
+      {/* =====================================================
+          DATE REVEAL
+      ===================================================== */}
 
       <DateReveal
         onReveal={() => {
@@ -851,7 +967,9 @@ export default function WeddingSite() {
         }}
       />
 
-      {/* COUNTDOWN */}
+      {/* =====================================================
+          COUNTDOWN
+      ===================================================== */}
 
       {dateRevealed && (
         <motion.section
@@ -866,7 +984,9 @@ export default function WeddingSite() {
           }}
           className="py-24 bg-[#17463d] text-white"
         >
+
           <div className="max-w-5xl mx-auto px-5 text-center">
+
             <p className="text-[10px] tracking-[0.4em] uppercase text-[#d5b56a] mb-6">
               Counting every moment
             </p>
@@ -876,17 +996,23 @@ export default function WeddingSite() {
             </h2>
 
             <Countdown />
+
           </div>
+
         </motion.section>
       )}
 
-      {/* STORY */}
+      {/* =====================================================
+          STORY
+      ===================================================== */}
 
       <section
         id="story"
         className="py-24 bg-[#f5eee2]"
       >
+
         <div className="max-w-4xl mx-auto px-5">
+
           <SectionTitle
             eyebrow="A little bit of us"
             title="Our Story"
@@ -909,6 +1035,7 @@ export default function WeddingSite() {
             }}
             className="text-center font-display text-2xl sm:text-3xl leading-relaxed text-[#17463d]/80"
           >
+
             <p>
               It all started with two
               people, two stories, and a
@@ -929,17 +1056,24 @@ export default function WeddingSite() {
               we are ready to begin our
               next chapter.
             </p>
+
           </motion.div>
+
         </div>
+
       </section>
 
-      {/* EVENTS */}
+      {/* =====================================================
+          EVENTS
+      ===================================================== */}
 
       <section
         id="celebrations"
         className="py-24 bg-[#eee3d2]"
       >
+
         <div className="max-w-6xl mx-auto px-5">
+
           <SectionTitle
             eyebrow={
               selectedSide === "groom"
@@ -950,6 +1084,7 @@ export default function WeddingSite() {
           />
 
           <div className="grid md:grid-cols-2 gap-6">
+
             {currentEvents.map(
               (event, index) => (
                 <motion.article
@@ -974,6 +1109,7 @@ export default function WeddingSite() {
                   }}
                   className="relative bg-[#f5eee2] border border-[#b9975b]/40 p-8 sm:p-10 shadow-sm hover:shadow-lg transition-shadow"
                 >
+
                   <div className="absolute top-0 left-0 right-0 h-1 bg-[#17463d]" />
 
                   <p className="text-[10px] tracking-[0.35em] text-[#b9975b]">
@@ -1012,26 +1148,35 @@ export default function WeddingSite() {
                   >
                     View location →
                   </a>
+
                 </motion.article>
               )
             )}
+
           </div>
+
         </div>
+
       </section>
 
-      {/* GALLERY */}
+      {/* =====================================================
+          GALLERY
+      ===================================================== */}
 
       <section
         id="gallery"
         className="py-24 bg-[#f5eee2]"
       >
+
         <div className="max-w-6xl mx-auto px-5">
+
           <SectionTitle
             eyebrow="Our moments"
             title="Gallery"
           />
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
             {gallery.map(
               (photo, index) => (
                 <motion.div
@@ -1053,32 +1198,43 @@ export default function WeddingSite() {
                   }}
                   className="overflow-hidden"
                 >
+
                   <img
                     src={photo.src}
                     alt={photo.alt}
                     className="w-full h-[280px] sm:h-[410px] object-cover hover:scale-105 transition duration-700"
                   />
+
                 </motion.div>
               )
             )}
+
           </div>
+
         </div>
+
       </section>
 
-      {/* FAMILY */}
+      {/* =====================================================
+          FAMILY
+      ===================================================== */}
 
       <section
         id="family"
         className="py-24 bg-[#eee3d2]"
       >
+
         <div className="max-w-5xl mx-auto px-5 text-center">
+
           <SectionTitle
             eyebrow="With love and blessings"
             title="Our Families"
           />
 
           <div className="grid md:grid-cols-2 gap-7">
+
             <div className="border border-[#b9975b]/40 bg-[#f5eee2] p-10">
+
               <p className="text-[10px] tracking-[0.35em] uppercase text-[#b9975b]">
                 The Groom
               </p>
@@ -1094,9 +1250,11 @@ export default function WeddingSite() {
               <p className="text-sm mt-2 text-[#17463d]">
                 Yogesh Sharma &amp; Manju
               </p>
+
             </div>
 
             <div className="border border-[#b9975b]/40 bg-[#f5eee2] p-10">
+
               <p className="text-[10px] tracking-[0.35em] uppercase text-[#b9975b]">
                 The Bride
               </p>
@@ -1112,25 +1270,35 @@ export default function WeddingSite() {
               <p className="text-sm mt-2 text-[#17463d]">
                 Satish Kumar &amp; Davina
               </p>
+
             </div>
+
           </div>
+
         </div>
+
       </section>
 
-      {/* TRAVEL */}
+      {/* =====================================================
+          TRAVEL
+      ===================================================== */}
 
       <section
         id="travel"
         className="py-24 bg-[#f5eee2]"
       >
+
         <div className="max-w-5xl mx-auto px-5">
+
           <SectionTitle
             eyebrow="For our guests"
             title="Travel & Stay"
           />
 
           <div className="grid md:grid-cols-2 gap-7">
+
             <div className="border border-[#b9975b]/40 p-9 bg-[#eee3d2]/40">
+
               <p className="text-[10px] tracking-[0.3em] uppercase text-[#b9975b]">
                 Pre-Wedding
               </p>
@@ -1144,9 +1312,11 @@ export default function WeddingSite() {
                 wedding will take place in
                 Ambala City.
               </p>
+
             </div>
 
             <div className="border border-[#b9975b]/40 p-9 bg-[#eee3d2]/40">
+
               <p className="text-[10px] tracking-[0.3em] uppercase text-[#b9975b]">
                 Wedding
               </p>
@@ -1168,18 +1338,26 @@ export default function WeddingSite() {
               >
                 Wedding venue →
               </a>
+
             </div>
+
           </div>
+
         </div>
+
       </section>
 
-      {/* RSVP */}
+      {/* =====================================================
+          RSVP
+      ===================================================== */}
 
       <section
         id="rsvp"
         className="py-24 bg-[#17463d] text-white"
       >
+
         <div className="max-w-2xl mx-auto px-5 text-center">
+
           <p className="text-[10px] tracking-[0.4em] uppercase text-[#d5b56a]">
             We'd love to celebrate with you
           </p>
@@ -1202,12 +1380,17 @@ export default function WeddingSite() {
           >
             RSVP Coming Soon
           </button>
+
         </div>
+
       </section>
 
-      {/* FOOTER */}
+      {/* =====================================================
+          FOOTER
+      ===================================================== */}
 
       <footer className="bg-[#092a24] text-white text-center py-16 px-5">
+
         <p className="font-display text-6xl text-[#d5b56a]">
           H{" "}
           <span className="text-white">
@@ -1227,7 +1410,9 @@ export default function WeddingSite() {
         <p className="text-xs text-white/30 mt-10">
           Made with love.
         </p>
+
       </footer>
+
     </main>
   );
 }
