@@ -243,14 +243,16 @@ function OpeningCurtain({
     useState(false);
 
   const handleReveal = () => {
-    if (opening) return;
+  if (opening || !selectedSide) return;
 
-    setOpening(true);
+  const side = selectedSide;
 
-    window.setTimeout(() => {
-      onOpen(selectedSide);
-    }, 1700);
-  };
+  setOpening(true);
+
+  window.setTimeout(() => {
+    onOpen(side);
+  }, 1700);
+};
 
   return (
     <div className="fixed inset-0 z-[9999] overflow-hidden bg-[#f5eee2]">
@@ -354,7 +356,7 @@ function OpeningCurtain({
           <motion.button
             type="button"
             onClick={handleReveal}
-            disabled={opening}
+            disabled={opening || !selectedSide}
             whileHover={{
               scale: opening ? 1 : 1.04,
             }}
