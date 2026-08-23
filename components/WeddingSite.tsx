@@ -888,8 +888,6 @@ function OpeningCurtain({
             "linear-gradient(90deg,#6d454b 0%,#9d6669 25%,#c98f8f 50%,#a96e72 75%,#70464c 100%)",
         }}
       >
-
-        <div className="absolute right-0 top-0 bottom-0 w-px bg-[#c99a98]/70" />
 </motion.div>
       {/* RIGHT CURTAIN */}
 
@@ -911,7 +909,7 @@ function OpeningCurtain({
         }}
       >
 
-       <div className="absolute left-0 top-0 bottom-0 w-px bg-[#c99a98]/70" />
+      
 </motion.div>
       {/* TOP DECOR */}
 
