@@ -290,7 +290,7 @@ function OpeningCurtain({
           >
             ✦
           </motion.div>
-        <p className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-black/70">
+        <p className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-black/70 font-semibold">
   With the blessings of our families
 </p>
 
@@ -304,7 +304,7 @@ function OpeningCurtain({
   Shreya
 </h1>
 
-<p className="font-display text-xl sm:text-2xl text-black/70 mt-9">
+<p className="font-display text-xl sm:text-2xl text-black/70 mt-9 font-semibold">
   A celebration of two families
 </p>
 
@@ -312,7 +312,7 @@ function OpeningCurtain({
 
           <div className="mt-10">
 
-            <p className="text-[9px] tracking-[0.35em] uppercase text-black/50 mb-5">
+            <p className="text-[9px] tracking-[0.35em] uppercase text-black/50 mb-5 font-semibold">
               Choose your side
             </p>
 
