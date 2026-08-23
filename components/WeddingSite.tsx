@@ -811,7 +811,7 @@ function OpeningCurtain({
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "groom"
                     ? "bg-[#b97979] text-white border-[#b97979]"
-                    : "bg-transparent border-[#b97979] text-white hover:bg-[#f7e9e4]"
+                    : "bg-transparent border-[#b97979] text-white hover:bg-[#b97979]"
                 }`}
               >
                 Groom&apos;s Side
@@ -825,7 +825,7 @@ function OpeningCurtain({
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "bride"
                     ? "bg-[#b97979] text-white border-[#b97979]"
-                    : "bg-transparent border-[#b97979] text-white hover:bg-[#f7e9e4]"
+                    : "bg-transparent border-[#b97979] text-white hover:bg-[#b97979]"
                 }`}
               >
                 Bride&apos;s Side
