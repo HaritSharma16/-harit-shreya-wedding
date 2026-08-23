@@ -290,14 +290,14 @@ function OpeningCurtain({
           >
             ✦
           </motion.div>
-        <p className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-black/70 font-semibold">
+        <p className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-black/70 font-semibold mt-16 sm:mt-20">
   With the blessings of our families
 </p>
 
 <h1 className="font-display text-[65px] sm:text-[105px] leading-[0.75] text-black mt-8">
   Harit
 
-  <span className="block text-4xl sm:text-6xl text-[#b9975b] my-6">
+  <span className="block text-4xl sm:text-6xl text-black my-6">
     &
   </span>
 
@@ -325,8 +325,8 @@ function OpeningCurtain({
                 }
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "groom"
-                    ? "bg-[#17463d] text-black border-[#17463d]"
-                    : "bg-transparent border-[#b9975b] text-[#17463d]"
+                    ? "bg-[#b9975b] text-white border-[#17463d]"
+                    : "bg-[#17463d] border-[#b9975b] text-black"
                 }`}
               >
                 Groom&apos;s Side
@@ -340,7 +340,7 @@ function OpeningCurtain({
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "bride"
                     ? "bg-[#b9975b] text-white border-[#17463d]"
-                    : "bg-transparent border-[#b9975b] text-[#17463d]"
+                    : "bg-[#17463d] border-[#b9975b] text-black"
                 }`}
               >
                 Bride&apos;s Side
