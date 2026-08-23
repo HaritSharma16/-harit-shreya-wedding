@@ -506,7 +506,7 @@ function ScratchCard({
     setProgress(percentage);
 
     if (
-      percentage >= 48 &&
+      percentage >= 20 &&
       !revealedRef.current
     ) {
       reveal();
