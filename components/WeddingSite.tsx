@@ -312,7 +312,7 @@ function OpeningCurtain({
 
           <div className="mt-10">
 
-            <p className="text-[9px] tracking-[0.35em] uppercase text-[#17463d]/50 mb-5">
+            <p className="text-[9px] tracking-[0.35em] uppercase text-black/50 mb-5">
               Choose your side
             </p>
 
