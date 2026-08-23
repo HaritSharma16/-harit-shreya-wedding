@@ -888,22 +888,8 @@ function OpeningCurtain({
             "linear-gradient(90deg,#6d454b 0%,#9d6669 25%,#c98f8f 50%,#a96e72 75%,#70464c 100%)",
         }}
       >
-        {[...Array(12)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute top-0 bottom-0"
-            style={{
-              left: `${i * 9}%`,
-              width: "12%",
-              background:
-                "linear-gradient(90deg,rgba(0,0,0,.16),rgba(255,255,255,.12),rgba(0,0,0,.16))",
-              filter: "blur(0.5px)",
-            }}
-          />
-        ))}
 
-        <div className="absolute right-0 top-0 bottom-0 w-[3px] bg-[#d9b29d]" />
-      </motion.div>
+        <div className="absolute right-0 top-0 bottom-0 w-px bg-[#c99a98]/70" />
 
       {/* RIGHT CURTAIN */}
 
@@ -924,22 +910,8 @@ function OpeningCurtain({
             "linear-gradient(270deg,#6d454b 0%,#9d6669 25%,#c98f8f 50%,#a96e72 75%,#70464c 100%)",
         }}
       >
-        {[...Array(12)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute top-0 bottom-0"
-            style={{
-              right: `${i * 9}%`,
-              width: "12%",
-              background:
-                "linear-gradient(90deg,rgba(0,0,0,.16),rgba(255,255,255,.12),rgba(0,0,0,.16))",
-              filter: "blur(0.5px)",
-            }}
-          />
-        ))}
 
-        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#d9b29d]" />
-      </motion.div>
+       <div className="absolute left-0 top-0 bottom-0 w-px bg-[#c99a98]/70" />
 
       {/* TOP DECOR */}
 
