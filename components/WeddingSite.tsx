@@ -506,7 +506,7 @@ function ScratchCard({
     setProgress(percentage);
 
     if (
-      percentage >= 20 &&
+      percentage >= 10 &&
       !revealedRef.current
     ) {
       reveal();
@@ -1198,9 +1198,6 @@ export default function WeddingSite() {
 
           <div className="w-16 h-px bg-[#c98f8f] mx-auto mt-8" />
 
-          <p className="text-[10px] tracking-[0.3em] uppercase text-[#70464c]/50 mt-6">
-            12 November 2026
-          </p>
         </motion.div>
       </section>
 
