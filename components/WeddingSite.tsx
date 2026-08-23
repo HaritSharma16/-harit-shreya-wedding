@@ -814,7 +814,7 @@ function OpeningCurtain({
                     : "bg-transparent border-[#b97979] text-white hover:bg-[#b97979]"
                 }`}
               >
-                Groom&apos;s Side
+                Team Groom
               </button>
 
               <button
@@ -828,7 +828,7 @@ function OpeningCurtain({
                     : "bg-transparent border-[#b97979] text-white hover:bg-[#b97979]"
                 }`}
               >
-                Bride&apos;s Side
+                Team Bride
               </button>
             </div>
           </div>
@@ -863,7 +863,7 @@ function OpeningCurtain({
               : "Enter Invitation"}
           </motion.button>
 
-          <p className="text-[8px] tracking-[0.3em] uppercase text-[#70464c]/40 mt-4">
+          <p className="text-[8px] tracking-[0.3em] uppercase text-white mt-4">
             Your celebration awaits
           </p>
         </div>
