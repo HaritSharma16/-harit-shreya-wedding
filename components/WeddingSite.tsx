@@ -399,72 +399,121 @@ function OpeningCurtain({
     >
       {/* CENTER */}
 
-      <motion.div
-        initial={{ opacity: 1 }}
-        animate={{
-          opacity: opening ? 0 : 1,
-        }}
-        transition={{
-          duration: 0.5,
-        }}
-        className="absolute inset-0 z-30 flex items-center justify-center px-5"
-      >
-        <div className="text-center w-full max-w-xl">
-          <motion.div
-            animate={{
-              opacity: [0.5, 1, 0.5],
-              scale: [1, 1.08, 1],
-            }}
-            transition={{
-              duration: 2.5,
-              repeat: Infinity,
-            }}
-            className="text-3xl mb-5"
-            style={{
-              color: COLORS.rose,
-            }}
-          >
-            ✦
-          </motion.div>
+      {/* =====================================================
+    CENTER INVITATION
+===================================================== */}
 
-          <p
-            className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase font-semibold"
-            style={{
-              color: COLORS.roseDark,
-            }}
-          >
-            With the blessings of our families
-          </p>
+<motion.div
+  initial={{ opacity: 1 }}
+  animate={{
+    opacity: opening ? 0 : 1,
+  }}
+  transition={{
+    duration: 0.5,
+  }}
+  className="absolute inset-0 z-30 flex items-center justify-center px-5"
+>
+  <div className="text-center w-full max-w-xl">
 
-          <h1
-            className="font-display text-[65px] sm:text-[105px] leading-[0.75] mt-7"
-            style={{
-              color: COLORS.roseDark,
-            }}
-          >
-            Harit
+    {/* Decorative symbol */}
+    <motion.div
+      animate={{
+        opacity: [0.4, 1, 0.4],
+        scale: [1, 1.08, 1],
+      }}
+      transition={{
+        duration: 2.5,
+        repeat: Infinity,
+      }}
+      className="text-[#b76e79] text-3xl mb-8"
+    >
+      ✦
+    </motion.div>
 
-            <span
-              className="block text-4xl sm:text-6xl my-6"
-              style={{
-                color: COLORS.rose,
-              }}
-            >
-              &
-            </span>
+    {/* INVITATION TEXT */}
 
-            Shreya
-          </h1>
+    <p className="text-[10px] sm:text-xs tracking-[0.45em] uppercase text-black/70 font-semibold">
+      You are invited
+    </p>
 
-          <p
-            className="font-display text-xl sm:text-2xl mt-9"
-            style={{
-              color: COLORS.roseDark,
-            }}
-          >
-            A celebration of two families
-          </p>
+    <h1 className="font-display text-6xl sm:text-8xl leading-none text-black mt-7">
+      You are invited
+    </h1>
 
+    <div className="w-16 h-px bg-[#b76e79] mx-auto mt-7" />
+
+    <p className="font-display text-xl sm:text-2xl text-black/60 mt-7">
+      to celebrate a beautiful beginning
+    </p>
+
+    {/* SIDE SELECTION */}
+
+    <div className="mt-12">
+
+      <p className="text-[10px] tracking-[0.35em] uppercase text-black/80 mb-5 font-bold">
+        Choose your side
+      </p>
+
+      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+
+        {/* GROOM */}
+
+        <button
+          type="button"
+          onClick={() => setSelectedSide("groom")}
+          className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
+            selectedSide === "groom"
+              ? "bg-[#b76e79] text-white border-[#b76e79]"
+              : "bg-[#fff8f5] border-[#b76e79]/60 text-[#7d4b53] hover:bg-[#b76e79] hover:text-white"
+          }`}
+        >
+          Groom&apos;s Side
+        </button>
+
+        {/* BRIDE */}
+
+        <button
+          type="button"
+          onClick={() => setSelectedSide("bride")}
+          className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
+            selectedSide === "bride"
+              ? "bg-[#b76e79] text-white border-[#b76e79]"
+              : "bg-[#fff8f5] border-[#b76e79]/60 text-[#7d4b53] hover:bg-[#b76e79] hover:text-white"
+          }`}
+        >
+          Bride&apos;s Side
+        </button>
+
+      </div>
+    </div>
+
+    {/* REVEAL BUTTON */}
+
+    <motion.button
+      type="button"
+      onClick={handleReveal}
+      disabled={opening || !selectedSide}
+      whileHover={{
+        scale: opening ? 1 : 1.04,
+      }}
+      whileTap={{
+        scale: opening ? 1 : 0.96,
+      }}
+      className={`mt-9 px-10 py-4 text-[10px] tracking-[0.35em] uppercase shadow-lg transition-all ${
+        selectedSide
+          ? "bg-[#b76e79] text-white border border-[#b76e79] cursor-pointer"
+          : "bg-[#d8b9bd] text-white/70 border border-[#d8b9bd] cursor-not-allowed"
+      }`}
+    >
+      {opening ? "Opening..." : "Tap to Reveal"}
+    </motion.button>
+
+    <p className="text-[8px] tracking-[0.3em] uppercase text-[#7d4b53]/40 mt-4">
+      Your celebration awaits
+    </p>
+
+  </div>
+</motion.div>
           {/* SIDE SELECTION */}
 
           <div className="mt-10">
