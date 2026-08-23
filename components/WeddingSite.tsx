@@ -240,11 +240,6 @@ function OpeningCurtain({
 
     setOpening(true);
 
-    /*
-      Curtain finishes first.
-      Then main website is mounted.
-    */
-
     window.setTimeout(() => {
       onOpen(selectedSide);
     }, 1700);
@@ -253,15 +248,11 @@ function OpeningCurtain({
   return (
     <div className="fixed inset-0 z-[9999] overflow-hidden bg-[#f5eee2]">
 
-      {/* =====================================================
-          CENTER BACKGROUND
-      ===================================================== */}
+      {/* CENTER BACKGROUND */}
 
       <div className="absolute inset-0 bg-[#f5eee2]" />
 
-      {/* =====================================================
-          CENTER INVITATION
-      ===================================================== */}
+      {/* CENTER INVITATION */}
 
       <motion.div
         initial={{ opacity: 1 }}
@@ -305,9 +296,7 @@ function OpeningCurtain({
             A celebration of two families
           </p>
 
-          {/* =================================================
-              SIDE SELECTION
-          ================================================= */}
+          {/* SIDE SELECTION */}
 
           <div className="mt-10">
 
@@ -328,7 +317,7 @@ function OpeningCurtain({
                     : "bg-transparent border-[#b9975b] text-[#17463d]"
                 }`}
               >
-                Groom's Side
+                Groom&apos;s Side
               </button>
 
               <button
@@ -342,15 +331,13 @@ function OpeningCurtain({
                     : "bg-transparent border-[#b9975b] text-[#17463d]"
                 }`}
               >
-                Bride's Side
+                Bride&apos;s Side
               </button>
 
             </div>
           </div>
 
-          {/* =================================================
-              REVEAL BUTTON
-          ================================================= */}
+          {/* REVEAL BUTTON */}
 
           <motion.button
             type="button"
@@ -373,9 +360,7 @@ function OpeningCurtain({
         </div>
       </motion.div>
 
-      {/* =====================================================
-          LEFT CURTAIN
-      ===================================================== */}
+      {/* LEFT CURTAIN */}
 
       <motion.div
         initial={{
@@ -413,9 +398,7 @@ function OpeningCurtain({
         <div className="absolute right-[4px] top-0 bottom-0 w-px bg-[#ead7a7]/50" />
       </motion.div>
 
-      {/* =====================================================
-          RIGHT CURTAIN
-      ===================================================== */}
+      {/* RIGHT CURTAIN */}
 
       <motion.div
         initial={{
@@ -453,9 +436,7 @@ function OpeningCurtain({
         <div className="absolute left-[4px] top-0 bottom-0 w-px bg-[#ead7a7]/50" />
       </motion.div>
 
-      {/* =====================================================
-          GOLD TOP ROD
-      ===================================================== */}
+      {/* GOLD TOP ROD */}
 
       <div className="absolute top-0 left-0 right-0 z-30">
         <div className="h-[5px] bg-[#b9975b]" />
@@ -463,9 +444,7 @@ function OpeningCurtain({
         <div className="h-[4px] bg-[#765d31]" />
       </div>
 
-      {/* =====================================================
-          FRAME
-      ===================================================== */}
+      {/* FRAME */}
 
       <div className="absolute inset-5 sm:inset-8 border border-[#d5b56a]/40 z-40 pointer-events-none" />
 
@@ -482,6 +461,7 @@ function OpeningCurtain({
           ✦
         </span>
       </div>
+
     </div>
   );
 }
@@ -514,6 +494,7 @@ function DateReveal({
 
   return (
     <section className="py-24 bg-[#eee3d2]">
+
       <div className="max-w-3xl mx-auto px-5 text-center">
 
         <p className="text-[10px] tracking-[0.4em] uppercase text-[#b9975b]">
@@ -537,10 +518,12 @@ function DateReveal({
             onClick={revealDate}
           >
 
-            {/* Actual date underneath */}
+            {/* ACTUAL DATE */}
 
             <div className="absolute inset-0 flex items-center justify-center">
+
               <div>
+
                 <p className="text-[9px] tracking-[0.4em] uppercase text-[#b9975b]">
                   Save the date
                 </p>
@@ -552,10 +535,12 @@ function DateReveal({
                 <p className="tracking-[0.4em] text-xs text-[#17463d]/60 mt-3">
                   2026
                 </p>
+
               </div>
+
             </div>
 
-            {/* Scratch layer */}
+            {/* SCRATCH LAYER */}
 
             <motion.div
               animate={{
@@ -572,6 +557,7 @@ function DateReveal({
             >
 
               <div className="absolute inset-0 opacity-20">
+
                 {[...Array(80)].map(
                   (_, index) => (
                     <span
@@ -584,6 +570,7 @@ function DateReveal({
                     />
                   )
                 )}
+
               </div>
 
               <div className="relative text-center text-white px-5">
@@ -601,10 +588,12 @@ function DateReveal({
                 </p>
 
                 <div className="mt-6 mx-auto w-20 h-px bg-white/50" />
+
               </div>
+
             </motion.div>
 
-            {/* Scratch progress */}
+            {/* SCRATCH PROGRESS */}
 
             {!revealed && scratched > 0 && (
               <motion.div
@@ -617,6 +606,7 @@ function DateReveal({
                 className="absolute bottom-0 left-0 h-1 bg-[#17463d] origin-left w-full"
               />
             )}
+
           </div>
 
           {!revealed && (
@@ -647,8 +637,11 @@ function DateReveal({
               The countdown has begun
             </motion.p>
           )}
+
         </div>
+
       </div>
+
     </section>
   );
 }
@@ -691,7 +684,6 @@ export default function WeddingSite() {
   ) => {
 
     setSelectedSide(side);
-
     setInvitationOpen(true);
 
     const audio =
@@ -710,10 +702,6 @@ export default function WeddingSite() {
         setMusicPlaying(true);
       })
       .catch(() => {
-        /*
-          Browser may block autoplay.
-          Music button will still work.
-        */
         setMusicPlaying(false);
       });
   };
@@ -755,9 +743,7 @@ export default function WeddingSite() {
   return (
     <main className="overflow-hidden">
 
-      {/* =================================================
-          AUDIO
-      ================================================= */}
+      {/* AUDIO */}
 
       <audio
         ref={audioRef}
@@ -766,9 +752,7 @@ export default function WeddingSite() {
         loop
       />
 
-      {/* =================================================
-          OPENING
-      ================================================= */}
+      {/* OPENING */}
 
       <AnimatePresence>
         {!invitationOpen && (
@@ -778,9 +762,7 @@ export default function WeddingSite() {
         )}
       </AnimatePresence>
 
-      {/* =================================================
-          MUSIC BUTTON
-      ================================================= */}
+      {/* MUSIC BUTTON */}
 
       {invitationOpen && (
         <motion.button
@@ -806,9 +788,7 @@ export default function WeddingSite() {
         </motion.button>
       )}
 
-      {/* =================================================
-          NAVIGATION
-      ================================================= */}
+      {/* NAVIGATION */}
 
       <header className="fixed top-0 left-0 right-0 z-40 bg-[#f5eee2]/90 backdrop-blur border-b border-[#17463d]/10">
 
@@ -879,11 +859,10 @@ export default function WeddingSite() {
           </a>
 
         </nav>
+
       </header>
 
-      {/* =================================================
-          HERO
-      ================================================= */}
+      {/* HERO */}
 
       <section
         id="home"
@@ -925,8 +904,6 @@ export default function WeddingSite() {
             are getting married
           </p>
 
-          {/* Date deliberately hidden here */}
-
           <p className="tracking-[0.35em] text-[10px] uppercase text-[#17463d]/60 mt-5">
             Ambala · Pathankot
           </p>
@@ -935,9 +912,7 @@ export default function WeddingSite() {
 
       </section>
 
-      {/* =================================================
-          DATE REVEAL
-      ================================================= */}
+      {/* DATE REVEAL */}
 
       <DateReveal
         onReveal={() => {
@@ -945,9 +920,7 @@ export default function WeddingSite() {
         }}
       />
 
-      {/* =================================================
-          COUNTDOWN
-      ================================================= */}
+      {/* COUNTDOWN */}
 
       {dateRevealed && (
         <motion.section
@@ -980,9 +953,7 @@ export default function WeddingSite() {
         </motion.section>
       )}
 
-      {/* =================================================
-          STORY
-      ================================================= */}
+      {/* STORY */}
 
       <section
         id="story"
@@ -1041,9 +1012,7 @@ export default function WeddingSite() {
 
       </section>
 
-      {/* =================================================
-          EVENTS
-      ================================================= */}
+      {/* EVENTS */}
 
       <section
         id="celebrations"
@@ -1139,9 +1108,7 @@ export default function WeddingSite() {
 
       </section>
 
-      {/* =================================================
-          GALLERY
-      ================================================= */}
+      {/* GALLERY */}
 
       <section
         id="gallery"
@@ -1197,9 +1164,7 @@ export default function WeddingSite() {
 
       </section>
 
-      {/* =================================================
-          FAMILY
-      ================================================= */}
+      {/* FAMILY */}
 
       <section
         id="family"
@@ -1230,7 +1195,7 @@ export default function WeddingSite() {
               </p>
 
               <p className="text-sm mt-2 text-[#17463d]">
-                Yogesh Sharma & Manju
+                Yogesh Sharma &amp; Manju
               </p>
 
             </div>
@@ -1250,7 +1215,7 @@ export default function WeddingSite() {
               </p>
 
               <p className="text-sm mt-2 text-[#17463d]">
-                Satish Kumar & Davina
+                Satish Kumar &amp; Davina
               </p>
 
             </div>
@@ -1261,9 +1226,7 @@ export default function WeddingSite() {
 
       </section>
 
-      {/* =================================================
-          TRAVEL
-      ================================================= */}
+      {/* TRAVEL */}
 
       <section
         id="travel"
@@ -1329,9 +1292,7 @@ export default function WeddingSite() {
 
       </section>
 
-      {/* =================================================
-          RSVP
-      ================================================= */}
+      {/* RSVP */}
 
       <section
         id="rsvp"
@@ -1367,9 +1328,7 @@ export default function WeddingSite() {
 
       </section>
 
-      {/* =================================================
-          FOOTER
-      ================================================= */}
+      {/* FOOTER */}
 
       <footer className="bg-[#092a24] text-white text-center py-16 px-5">
 
@@ -1382,7 +1341,7 @@ export default function WeddingSite() {
         </p>
 
         <p className="font-display text-3xl mt-4">
-          Harit & Shreya
+          Harit &amp; Shreya
         </p>
 
         <p className="text-[10px] tracking-[0.35em] uppercase text-white/50 mt-5">
