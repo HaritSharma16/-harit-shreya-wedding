@@ -1040,7 +1040,7 @@ export default function WeddingSite() {
       : groomEvents;
 
   return (
-    <main className="overflow-hidden bg-[#fffaf5]">
+    <main className="overflow-hidden bg-[#fdf7f4]">
       {/* AUDIO */}
 
       <audio
