@@ -799,7 +799,7 @@ function OpeningCurtain({
 
           <div className="mt-12">
             <p className="text-[9px] tracking-[0.35em] uppercase text-white/80 mb-5 font-bold">
-              Choose your side
+              Choose your Team
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -1300,8 +1300,8 @@ export default function WeddingSite() {
           <SectionTitle
             eyebrow={
               selectedSide === "bride"
-                ? "Bride's side"
-                : "Groom's side"
+                ? "Team Bride"
+                : "Team Groom"
             }
             title="The Celebrations"
           />
