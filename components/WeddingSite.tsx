@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
    EVENTS
 ========================================================= */
 
-const commonEvents = [
+const events = [
   {
     date: "25 OCTOBER 2026",
     title: "Kirtan",
@@ -78,20 +78,17 @@ const gallery = [
    MUSIC
 ========================================================= */
 
-const MUSIC_START = 8;
-const MUSIC_END = 36;
-
-/* =========================================================
-   TYPES
-========================================================= */
-
-type Side = "groom" | "bride" | null;
+const MUSIC_START = 0;
 
 /* =========================================================
    COUNTDOWN
 ========================================================= */
 
-function Countdown() {
+function Countdown({
+  active,
+}: {
+  active: boolean;
+}) {
   const weddingDate = new Date(
     "2026-11-12T18:00:00+05:30"
   ).getTime();
@@ -104,6 +101,8 @@ function Countdown() {
   });
 
   useEffect(() => {
+    if (!active) return;
+
     const update = () => {
       const difference = Math.max(
         weddingDate - Date.now(),
@@ -135,7 +134,7 @@ function Countdown() {
 
     return () =>
       clearInterval(timer);
-  }, [weddingDate]);
+  }, [active, weddingDate]);
 
   return (
     <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-2xl mx-auto">
@@ -143,16 +142,16 @@ function Countdown() {
         ([label, value]) => (
           <div
             key={label}
-            className="border border-[#d6b76d]/40 bg-black/10 px-2 py-4 sm:px-6 sm:py-6"
+            className="border border-champagne/40 bg-emerald-dark/50 px-2 py-4 sm:px-6 sm:py-6"
           >
-            <div className="font-display text-3xl sm:text-5xl text-[#d6b76d]">
+            <div className="font-display text-3xl sm:text-5xl text-champagne">
               {String(value).padStart(
                 2,
                 "0"
               )}
             </div>
 
-            <div className="text-[8px] sm:text-[9px] tracking-[0.25em] uppercase text-white/50 mt-2">
+            <div className="text-[8px] sm:text-[9px] tracking-[0.25em] uppercase text-cream/50 mt-2">
               {label}
             </div>
           </div>
@@ -175,197 +174,431 @@ function SectionTitle({
 }) {
   return (
     <div className="text-center mb-14">
-      <p className="text-[10px] tracking-[0.4em] uppercase text-[#b9975b] mb-4">
+      <p className="text-[10px] tracking-[0.4em] uppercase text-gold mb-4">
         {eyebrow}
       </p>
 
-      <h2 className="font-display text-5xl sm:text-6xl text-[#17463d]">
+      <h2 className="font-display text-5xl sm:text-6xl text-emerald">
         {title}
       </h2>
 
-      <div className="w-16 h-px bg-[#b9975b] mx-auto mt-5" />
+      <div className="gold-rule mx-auto mt-5" />
     </div>
   );
 }
 
 /* =========================================================
-   SIDE SELECTION
+   SCRATCH DATE
 ========================================================= */
 
-function SideSelection({
-  onSelect,
+function ScratchDate({
+  onReveal,
 }: {
-  onSelect: (side: "groom" | "bride") => void;
+  onReveal: () => void;
 }) {
-  return (
-    <motion.section
-      initial={{
-        opacity: 0,
-        y: 30,
-      }}
-      animate={{
-        opacity: 1,
+  const canvasRef =
+    useRef<HTMLCanvasElement | null>(
+      null
+    );
+
+  const containerRef =
+    useRef<HTMLDivElement | null>(
+      null
+    );
+
+  const drawingRef =
+    useRef(false);
+
+  const revealedRef =
+    useRef(false);
+
+  const [progress, setProgress] =
+    useState(0);
+
+  useEffect(() => {
+    const canvas =
+      canvasRef.current;
+
+    const container =
+      containerRef.current;
+
+    if (!canvas || !container) return;
+
+    const rect =
+      container.getBoundingClientRect();
+
+    const dpr =
+      window.devicePixelRatio || 1;
+
+    canvas.width =
+      rect.width * dpr;
+
+    canvas.height =
+      rect.height * dpr;
+
+    canvas.style.width =
+      `${rect.width}px`;
+
+    canvas.style.height =
+      `${rect.height}px`;
+
+    const ctx =
+      canvas.getContext("2d");
+
+    if (!ctx) return;
+
+    ctx.scale(dpr, dpr);
+
+    /* Base scratch layer */
+
+    const gradient =
+      ctx.createLinearGradient(
+        0,
+        0,
+        rect.width,
+        rect.height
+      );
+
+    gradient.addColorStop(
+      0,
+      "#d9bd79"
+    );
+
+    gradient.addColorStop(
+      0.5,
+      "#b9975b"
+    );
+
+    gradient.addColorStop(
+      1,
+      "#8e713d"
+    );
+
+    ctx.fillStyle = gradient;
+
+    ctx.fillRect(
+      0,
+      0,
+      rect.width,
+      rect.height
+    );
+
+    /* Decorative lines */
+
+    ctx.globalAlpha = 0.18;
+
+    for (
+      let x = -rect.height;
+      x < rect.width;
+      x += 20
+    ) {
+      ctx.beginPath();
+
+      ctx.moveTo(x, 0);
+
+      ctx.lineTo(
+        x + rect.height,
+        rect.height
+      );
+
+      ctx.strokeStyle =
+        "#fff7df";
+
+      ctx.lineWidth = 1;
+
+      ctx.stroke();
+    }
+
+    ctx.globalAlpha = 1;
+
+    /* Scratch instruction */
+
+    ctx.fillStyle =
+      "rgba(255,255,255,0.75)";
+
+    ctx.font =
+      "600 11px Arial";
+
+    ctx.textAlign =
+      "center";
+
+    ctx.textBaseline =
+      "middle";
+
+    ctx.letterSpacing = "2px";
+
+    ctx.fillText(
+      "SCRATCH TO REVEAL",
+      rect.width / 2,
+      rect.height / 2
+    );
+
+    return () => {
+      ctx.clearRect(
+        0,
+        0,
+        rect.width,
+        rect.height
+      );
+    };
+  }, []);
+
+  const getPoint = (
+    event:
+      | React.PointerEvent<HTMLCanvasElement>
+  ) => {
+    const canvas =
+      canvasRef.current;
+
+    if (!canvas) {
+      return {
+        x: 0,
         y: 0,
-      }}
-      transition={{
-        duration: 1,
-      }}
-      className="fixed inset-0 z-[90] bg-[#f4eee3] flex items-center justify-center overflow-hidden"
-    >
-      {/* Background texture */}
+      };
+    }
 
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#b9975b]/20 blur-3xl" />
+    const rect =
+      canvas.getBoundingClientRect();
 
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#17463d]/20 blur-3xl" />
-      </div>
+    return {
+      x:
+        event.clientX -
+        rect.left,
 
-      <div className="relative z-10 w-full max-w-5xl px-6 text-center">
+      y:
+        event.clientY -
+        rect.top,
+    };
+  };
 
-        {/* Ornament */}
+  const scratch = (
+    event: React.PointerEvent<HTMLCanvasElement>
+  ) => {
+    const canvas =
+      canvasRef.current;
 
-        <motion.div
-          animate={{
-            rotate: [0, 5, -5, 0],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-          }}
-          className="text-[#b9975b] text-3xl mb-8"
-        >
-          ✦
-        </motion.div>
+    if (!canvas) return;
 
-        <p className="text-[9px] sm:text-[10px] tracking-[0.5em] uppercase text-[#17463d]/60">
-          Welcome to our wedding
-        </p>
+    const ctx =
+      canvas.getContext("2d");
 
-        <h1 className="font-display text-5xl sm:text-7xl text-[#17463d] mt-5">
-          Whose side are you on?
-        </h1>
+    if (!ctx) return;
 
-        <p className="font-display text-xl sm:text-2xl text-[#17463d]/60 mt-5">
-          Choose your side to continue
-        </p>
+    const point =
+      getPoint(event);
 
-        {/* Side cards */}
+    ctx.globalCompositeOperation =
+      "destination-out";
 
-        <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto mt-12">
+    ctx.beginPath();
 
-          {/* Groom */}
+    ctx.arc(
+      point.x,
+      point.y,
+      22,
+      0,
+      Math.PI * 2
+    );
 
-          <motion.button
-            whileHover={{
-              y: -8,
-              scale: 1.02,
-            }}
-            whileTap={{
-              scale: 0.98,
-            }}
-            onClick={() =>
-              onSelect("groom")
-            }
-            className="group relative overflow-hidden border border-[#b9975b]/50 bg-[#17463d] text-white px-8 py-12 sm:py-16"
-          >
+    ctx.fill();
 
-            <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-white/20 via-transparent to-black/30" />
+    calculateProgress();
+  };
 
-            <div className="relative z-10">
+  const calculateProgress = () => {
+    const canvas =
+      canvasRef.current;
 
-              <p className="text-[9px] tracking-[0.4em] uppercase text-[#d6b76d]">
-                Groom's Side
-              </p>
+    if (!canvas) return;
 
-              <h2 className="font-display text-5xl sm:text-6xl mt-5">
-                Harit
-              </h2>
+    const ctx =
+      canvas.getContext("2d");
 
-              <div className="w-12 h-px bg-[#d6b76d] mx-auto my-5" />
+    if (!ctx) return;
 
-              <p className="text-[9px] tracking-[0.3em] uppercase text-white/60">
-                Enter the celebration
-              </p>
+    const imageData =
+      ctx.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
 
-              <span className="block mt-8 text-[#d6b76d] text-xl group-hover:translate-x-2 transition-transform">
-                →
-              </span>
+    let transparent = 0;
 
-            </div>
-          </motion.button>
+    const data =
+      imageData.data;
 
-          {/* Bride */}
+    /*
+      Check every 16th pixel to
+      keep this lightweight.
+    */
 
-          <motion.button
-            whileHover={{
-              y: -8,
-              scale: 1.02,
-            }}
-            whileTap={{
-              scale: 0.98,
-            }}
-            onClick={() =>
-              onSelect("bride")
-            }
-            className="group relative overflow-hidden border border-[#b9975b]/50 bg-[#f8f1e5] text-[#17463d] px-8 py-12 sm:py-16"
-          >
+    for (
+      let i = 3;
+      i < data.length;
+      i += 64
+    ) {
+      if (data[i] < 50) {
+        transparent++;
+      }
+    }
 
-            <div className="absolute inset-0 opacity-30 bg-gradient-to-br from-[#b9975b]/20 via-transparent to-[#17463d]/10" />
+    const total =
+      data.length / 64;
 
-            <div className="relative z-10">
+    const percentage =
+      (transparent / total) *
+      100;
 
-              <p className="text-[9px] tracking-[0.4em] uppercase text-[#b9975b]">
-                Bride's Side
-              </p>
+    setProgress(
+      Math.min(
+        Math.round(percentage),
+        100
+      )
+    );
 
-              <h2 className="font-display text-5xl sm:text-6xl mt-5">
-                Shreya
-              </h2>
+    if (
+      percentage >= 45 &&
+      !revealedRef.current
+    ) {
+      revealedRef.current = true;
 
-              <div className="w-12 h-px bg-[#b9975b] mx-auto my-5" />
+      onReveal();
+    }
+  };
 
-              <p className="text-[9px] tracking-[0.3em] uppercase text-[#17463d]/50">
-                Enter the celebration
-              </p>
+  const startScratch = (
+    event: React.PointerEvent<HTMLCanvasElement>
+  ) => {
+    drawingRef.current =
+      true;
 
-              <span className="block mt-8 text-[#b9975b] text-xl group-hover:translate-x-2 transition-transform">
-                →
-              </span>
+    event.currentTarget.setPointerCapture(
+      event.pointerId
+    );
 
-            </div>
-          </motion.button>
+    scratch(event);
+  };
 
+  const moveScratch = (
+    event: React.PointerEvent<HTMLCanvasElement>
+  ) => {
+    if (!drawingRef.current)
+      return;
+
+    scratch(event);
+  };
+
+  const stopScratch = (
+    event: React.PointerEvent<HTMLCanvasElement>
+  ) => {
+    drawingRef.current =
+      false;
+
+    try {
+      event.currentTarget.releasePointerCapture(
+        event.pointerId
+      );
+    } catch {}
+  };
+
+  return (
+    <div className="mt-8">
+      <div
+        ref={containerRef}
+        className="relative w-[290px] sm:w-[380px] h-[145px] sm:h-[165px] mx-auto overflow-hidden rounded-sm border border-[#b9975b]/50 bg-[#f7f0e4] shadow-lg"
+      >
+        {/* DATE UNDER SCRATCH */}
+
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-[#17463d]">
+          <p className="text-[8px] tracking-[0.45em] uppercase text-[#17463d]/50 mb-3">
+            Our Wedding Date
+          </p>
+
+          <p className="font-display text-3xl sm:text-4xl">
+            12 November 2026
+          </p>
+
+          <p className="text-[8px] tracking-[0.4em] uppercase mt-3 text-[#17463d]/50">
+            Pathankot
+          </p>
         </div>
 
-        <p className="text-[8px] tracking-[0.35em] uppercase text-[#17463d]/40 mt-10">
-          Your celebration awaits
-        </p>
+        {/* SCRATCH CANVAS */}
 
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 touch-none cursor-crosshair"
+          onPointerDown={
+            startScratch
+          }
+          onPointerMove={
+            moveScratch
+          }
+          onPointerUp={
+            stopScratch
+          }
+          onPointerCancel={
+            stopScratch
+          }
+          onPointerLeave={() => {
+            drawingRef.current =
+              false;
+          }}
+        />
       </div>
-    </motion.section>
+
+      <p className="text-[8px] tracking-[0.3em] uppercase text-[#17463d]/50 mt-4">
+        {progress > 0
+          ? `${progress}% revealed`
+          : "Scratch gently to reveal"}
+      </p>
+    </div>
   );
 }
 
 /* =========================================================
-   OPENING CURTAIN
+   OPENING INVITATION
 ========================================================= */
 
 function OpeningInvitation({
   onOpen,
+  onDateReveal,
 }: {
   onOpen: () => void;
+  onDateReveal: () => void;
 }) {
   const [opening, setOpening] =
     useState(false);
 
-  const handleOpen = () => {
-    if (opening) return;
+  const [side, setSide] =
+    useState<
+      "groom" | "bride" | null
+    >(null);
 
-    setOpening(true);
+  const [dateRevealed, setDateRevealed] =
+    useState(false);
+
+  const handleDateReveal = () => {
+    if (dateRevealed) return;
+
+    setDateRevealed(true);
+
+    onDateReveal();
+
+    /*
+      Give the visitor a moment
+      to see the revealed date.
+    */
 
     setTimeout(() => {
-      onOpen();
-    }, 1800);
+      setOpening(true);
+
+      setTimeout(() => {
+        onOpen();
+      }, 1700);
+    }, 1400);
   };
 
   return (
@@ -377,41 +610,46 @@ function OpeningInvitation({
         opacity: 0,
       }}
       transition={{
-        duration: 0.6,
+        duration: 0.7,
       }}
-      onClick={handleOpen}
-      className="fixed inset-0 z-[100] overflow-hidden cursor-pointer"
+      className="fixed inset-0 z-[100] overflow-hidden bg-[#f4eee3]"
     >
-
-      {/* Center */}
+      {/* =====================================================
+          CENTER BACKGROUND
+      ===================================================== */}
 
       <div className="absolute inset-0 bg-[#f4eee3]" />
+
+      {/* =====================================================
+          CENTER CONTENT
+      ===================================================== */}
 
       <motion.div
         initial={{
           opacity: 0,
-          scale: 0.92,
-          y: 15,
+          scale: 0.96,
         }}
         animate={{
           opacity: 1,
-          scale: opening ? 1.04 : 1,
-          y: 0,
+          scale: dateRevealed
+            ? 1.03
+            : 1,
         }}
         transition={{
-          duration: 1.2,
+          duration: 1,
         }}
         className="absolute inset-0 z-10 flex items-center justify-center"
       >
+        <div className="text-center px-5">
 
-        <div className="text-center px-6">
+          {/* Ornament */}
 
           <motion.div
             animate={{
               opacity: [
-                0.6,
+                0.5,
                 1,
-                0.6,
+                0.5,
               ],
               scale: [
                 1,
@@ -423,84 +661,152 @@ function OpeningInvitation({
               duration: 2.5,
               repeat: Infinity,
             }}
-            className="text-[#b99a5b] text-3xl mb-7"
+            className="text-[#b9975b] text-3xl mb-6"
           >
             ✦
           </motion.div>
 
-          <p className="text-[8px] sm:text-[10px] tracking-[0.5em] uppercase text-[#17463d]/60">
+          {/* Blessing */}
+
+          <p className="text-[8px] sm:text-[10px] tracking-[0.45em] uppercase text-[#17463d]/60">
             With the blessings of our families
           </p>
 
-          <h1 className="font-display text-[70px] sm:text-[120px] leading-[0.72] text-[#17463d] mt-9">
+          {/* Names */}
 
+          <h1 className="font-display text-[62px] sm:text-[105px] leading-[0.72] text-[#17463d] mt-8">
             Harit
 
-            <span className="block text-4xl sm:text-6xl text-[#b99a5b] my-6">
+            <span className="block text-4xl sm:text-6xl text-[#b9975b] my-5">
               &
             </span>
 
             Shreya
-
           </h1>
 
-          <p className="font-display text-xl sm:text-3xl text-[#17463d]/75 mt-10">
-            are getting married
-          </p>
+          {/* SIDE SELECTION */}
 
-          {/* Date intentionally hidden */}
+          {!side && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 15,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.6,
+              }}
+              className="mt-10"
+            >
+              <p className="text-[9px] tracking-[0.3em] uppercase text-[#17463d]/60 mb-5">
+                You are invited from
+              </p>
 
-          <div className="flex items-center justify-center gap-4 mt-8">
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
 
-            <span className="w-10 sm:w-16 h-px bg-[#b99a5b]" />
+                <button
+                  onClick={() =>
+                    setSide("groom")
+                  }
+                  className="px-7 py-3 border border-[#b9975b] text-[#17463d] text-[9px] tracking-[0.25em] uppercase hover:bg-[#17463d] hover:text-[#f4eee3] transition duration-300"
+                >
+                  Groom's Side
+                </button>
 
-            <span className="font-display text-xl sm:text-2xl text-[#17463d]">
-              A new chapter begins
-            </span>
+                <button
+                  onClick={() =>
+                    setSide("bride")
+                  }
+                  className="px-7 py-3 border border-[#b9975b] text-[#17463d] text-[9px] tracking-[0.25em] uppercase hover:bg-[#17463d] hover:text-[#f4eee3] transition duration-300"
+                >
+                  Bride's Side
+                </button>
 
-            <span className="w-10 sm:w-16 h-px bg-[#b99a5b]" />
+              </div>
+            </motion.div>
+          )}
 
-          </div>
+          {/* SELECTED SIDE */}
 
-          <p className="text-[8px] sm:text-[9px] tracking-[0.45em] uppercase text-[#17463d]/50 mt-4">
-            Pathankot
-          </p>
+          {side && !dateRevealed && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 15,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              className="mt-7"
+            >
+              <p className="text-[9px] tracking-[0.35em] uppercase text-[#b9975b]">
+                {side === "groom"
+                  ? "Welcome from the Groom's Side"
+                  : "Welcome from the Bride's Side"}
+              </p>
 
-          <motion.div
-            animate={{
-              opacity: [
-                0.35,
-                1,
-                0.35,
-              ],
-              y: [0, 5, 0],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-            }}
-            className="mt-12"
-          >
+              <p className="font-display text-xl sm:text-2xl text-[#17463d]/75 mt-4">
+                A little secret awaits...
+              </p>
 
-            <div className="w-10 h-10 rounded-full border border-[#b99a5b] flex items-center justify-center mx-auto">
+              <ScratchDate
+                onReveal={
+                  handleDateReveal
+                }
+              />
 
-              <span className="text-[#b99a5b] text-sm">
-                ↓
-              </span>
+              <button
+                onClick={() =>
+                  setSide(null)
+                }
+                className="mt-5 text-[8px] tracking-[0.3em] uppercase text-[#17463d]/40 hover:text-[#b9975b]"
+              >
+                ← Change side
+              </button>
+            </motion.div>
+          )}
 
-            </div>
+          {/* REVEALED DATE */}
 
-            <p className="text-[8px] tracking-[0.4em] uppercase text-[#17463d]/60 mt-3">
-              Tap to open
-            </p>
+          {dateRevealed && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                scale: 0.8,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+              }}
+              transition={{
+                duration: 0.7,
+              }}
+              className="mt-8"
+            >
+              <p className="text-[9px] tracking-[0.4em] uppercase text-[#b9975b]">
+                The date is revealed
+              </p>
 
-          </motion.div>
+              <p className="font-display text-3xl sm:text-4xl text-[#17463d] mt-3">
+                12 November 2026
+              </p>
+
+              <p className="text-[8px] tracking-[0.4em] uppercase text-[#17463d]/50 mt-2">
+                Pathankot
+              </p>
+            </motion.div>
+          )}
 
         </div>
-
       </motion.div>
 
-      {/* LEFT CURTAIN */}
+      {/* =====================================================
+          LEFT CURTAIN
+      ===================================================== */}
 
       <motion.div
         initial={{
@@ -512,7 +818,7 @@ function OpeningInvitation({
             : "0%",
         }}
         transition={{
-          duration: 1.8,
+          duration: 1.7,
           ease: [
             0.76,
             0,
@@ -523,12 +829,11 @@ function OpeningInvitation({
         className="absolute left-0 top-0 bottom-0 w-1/2 z-20 overflow-hidden"
         style={{
           background:
-            "linear-gradient(90deg, #0b3029 0%, #17463d 35%, #0e382f 70%, #092a24 100%)",
+            "linear-gradient(90deg,#082a23 0%,#17463d 35%,#0d372f 70%,#06251f 100%)",
         }}
       >
 
         <div className="absolute inset-0">
-
           {[...Array(10)].map(
             (_, i) => (
               <div
@@ -536,30 +841,32 @@ function OpeningInvitation({
                 className="absolute top-0 bottom-0"
                 style={{
                   left: `${i * 10}%`,
-                  width: "12%",
+                  width: "14%",
                   background:
-                    "linear-gradient(90deg, rgba(0,0,0,0.22), rgba(255,255,255,0.06), rgba(0,0,0,0.22))",
-                  filter: "blur(1px)",
+                    "linear-gradient(90deg,rgba(0,0,0,.22),rgba(255,255,255,.06),rgba(0,0,0,.22))",
+                  filter:
+                    "blur(1px)",
                 }}
               />
             )
           )}
-
         </div>
 
         <div
-          className="absolute top-0 bottom-0 right-0 w-[20%]"
+          className="absolute top-0 bottom-0 right-0 w-[18%]"
           style={{
             background:
-              "linear-gradient(90deg, transparent, rgba(255,255,255,0.12))",
+              "linear-gradient(90deg,transparent,rgba(255,255,255,.12))",
           }}
         />
 
-        <div className="absolute right-0 top-0 bottom-0 w-[3px] bg-[#b99a5b]" />
+        <div className="absolute right-0 top-0 bottom-0 w-[3px] bg-[#b9975b]" />
 
       </motion.div>
 
-      {/* RIGHT CURTAIN */}
+      {/* =====================================================
+          RIGHT CURTAIN
+      ===================================================== */}
 
       <motion.div
         initial={{
@@ -571,7 +878,7 @@ function OpeningInvitation({
             : "0%",
         }}
         transition={{
-          duration: 1.8,
+          duration: 1.7,
           ease: [
             0.76,
             0,
@@ -582,12 +889,11 @@ function OpeningInvitation({
         className="absolute right-0 top-0 bottom-0 w-1/2 z-20 overflow-hidden"
         style={{
           background:
-            "linear-gradient(270deg, #0b3029 0%, #17463d 35%, #0e382f 70%, #092a24 100%)",
+            "linear-gradient(270deg,#082a23 0%,#17463d 35%,#0d372f 70%,#06251f 100%)",
         }}
       >
 
         <div className="absolute inset-0">
-
           {[...Array(10)].map(
             (_, i) => (
               <div
@@ -595,79 +901,73 @@ function OpeningInvitation({
                 className="absolute top-0 bottom-0"
                 style={{
                   right: `${i * 10}%`,
-                  width: "12%",
+                  width: "14%",
                   background:
-                    "linear-gradient(90deg, rgba(0,0,0,0.22), rgba(255,255,255,0.06), rgba(0,0,0,0.22))",
-                  filter: "blur(1px)",
+                    "linear-gradient(90deg,rgba(0,0,0,.22),rgba(255,255,255,.06),rgba(0,0,0,.22))",
+                  filter:
+                    "blur(1px)",
                 }}
               />
             )
           )}
-
         </div>
 
         <div
-          className="absolute top-0 bottom-0 left-0 w-[20%]"
+          className="absolute top-0 bottom-0 left-0 w-[18%]"
           style={{
             background:
-              "linear-gradient(270deg, transparent, rgba(255,255,255,0.12))",
+              "linear-gradient(270deg,transparent,rgba(255,255,255,.12))",
           }}
         />
 
-        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#b99a5b]" />
+        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#b9975b]" />
 
       </motion.div>
 
-      {/* TOP ROD */}
+      {/* =====================================================
+          TOP ROD
+      ===================================================== */}
 
       <div className="absolute top-0 left-0 right-0 z-30">
-
-        <div className="h-[5px] bg-[#b99a5b]" />
-
+        <div className="h-[5px] bg-[#b9975b]" />
         <div className="h-[2px] bg-[#ead7a7]" />
-
-        <div className="h-[5px] bg-[#7d6333]/60" />
-
+        <div className="h-[5px] bg-[#7d6333]/70" />
       </div>
 
-      {/* FRAME */}
+      {/* =====================================================
+          FRAME
+      ===================================================== */}
 
       <div className="absolute inset-5 sm:inset-8 border border-[#d6b76d]/35 z-40 pointer-events-none" />
 
-      {/* Bottom */}
+      {/* CORNER ORNAMENTS */}
 
-      <motion.div
-        animate={{
-          opacity: opening
-            ? 0
-            : 1,
-        }}
-        className="absolute bottom-7 left-0 right-0 z-40 text-center pointer-events-none"
-      >
-        <span className="text-[#b99a5b] text-sm">
-          ✦
-        </span>
-      </motion.div>
+      <div className="absolute top-8 left-8 z-40 text-[#d6b76d] text-xl pointer-events-none">
+        ✦
+      </div>
+
+      <div className="absolute top-8 right-8 z-40 text-[#d6b76d] text-xl pointer-events-none">
+        ✦
+      </div>
 
     </motion.div>
   );
 }
 
 /* =========================================================
-   MAIN WEBSITE
+   MAIN WEDDING SITE
 ========================================================= */
 
 export default function WeddingSite() {
-
   const [
     invitationOpen,
     setInvitationOpen,
   ] = useState(false);
 
   const [
-    selectedSide,
-    setSelectedSide,
-  ] = useState<Side>(null);
+    dateRevealed,
+    setDateRevealed,
+  ] = useState(false);
 
   const [
     musicPlaying,
@@ -679,147 +979,32 @@ export default function WeddingSite() {
       null
     );
 
-  const stopTimerRef =
-    useRef<ReturnType<typeof setTimeout> | null>(
-      null
-    );
-
-  const fadeTimerRef =
-    useRef<ReturnType<typeof setInterval> | null>(
-      null
-    );
-
   /* =======================================================
-     MUSIC FADE
+     DATE REVEAL + MUSIC
   ======================================================= */
 
-  const fadeAudio = (
-    audio: HTMLAudioElement,
-    from: number,
-    to: number,
-    duration: number
-  ) => {
-
-    const steps = 30;
-
-    const stepTime =
-      duration / steps;
-
-    const volumeStep =
-      (to - from) / steps;
-
-    let currentStep = 0;
-
-    audio.volume = from;
-
-    if (fadeTimerRef.current) {
-      clearInterval(
-        fadeTimerRef.current
-      );
-    }
-
-    fadeTimerRef.current =
-      setInterval(() => {
-
-        currentStep++;
-
-        audio.volume =
-          Math.max(
-            0,
-            Math.min(
-              1,
-              from +
-                volumeStep *
-                  currentStep
-            )
-          );
-
-        if (
-          currentStep >=
-          steps
-        ) {
-
-          if (
-            fadeTimerRef.current
-          ) {
-            clearInterval(
-              fadeTimerRef.current
-            );
-
-            fadeTimerRef.current =
-              null;
-          }
-
-        }
-
-      }, stepTime);
-  };
-
-  /* =======================================================
-     OPEN INVITATION
-  ======================================================= */
-
-  const openInvitation = () => {
-
-    setInvitationOpen(true);
+  const handleDateReveal = () => {
+    setDateRevealed(true);
 
     const audio =
       audioRef.current;
 
     if (!audio) return;
 
-    if (stopTimerRef.current) {
-      clearTimeout(
-        stopTimerRef.current
-      );
-    }
-
     audio.currentTime =
       MUSIC_START;
 
-    audio.volume = 0;
+    audio.volume = 0.35;
+
+    /*
+      Music starts here and DOES NOT
+      have an ending timer.
+    */
 
     audio
       .play()
       .then(() => {
-
         setMusicPlaying(true);
-
-        fadeAudio(
-          audio,
-          0,
-          0.35,
-          2000
-        );
-
-        stopTimerRef.current =
-          setTimeout(() => {
-
-            const currentVolume =
-              audio.volume;
-
-            fadeAudio(
-              audio,
-              currentVolume,
-              0,
-              2500
-            );
-
-            setTimeout(() => {
-
-              audio.pause();
-
-              audio.currentTime =
-                MUSIC_START;
-
-              setMusicPlaying(
-                false
-              );
-
-            }, 2500);
-
-          }, (MUSIC_END - MUSIC_START) * 1000);
-
       })
       .catch(() => {
         setMusicPlaying(false);
@@ -827,20 +1012,11 @@ export default function WeddingSite() {
   };
 
   /* =======================================================
-     SIDE SELECT
+     OPEN INVITATION
   ======================================================= */
 
-  const handleSideSelect = (
-    side: "groom" | "bride"
-  ) => {
-
-    setSelectedSide(side);
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-
+  const openInvitation = () => {
+    setInvitationOpen(true);
   };
 
   /* =======================================================
@@ -848,27 +1024,17 @@ export default function WeddingSite() {
   ======================================================= */
 
   const toggleMusic = () => {
-
     const audio =
       audioRef.current;
 
     if (!audio) return;
 
     if (musicPlaying) {
-
       audio.pause();
 
       setMusicPlaying(false);
 
       return;
-    }
-
-    if (
-      audio.currentTime >=
-      MUSIC_END
-    ) {
-      audio.currentTime =
-        MUSIC_START;
     }
 
     audio
@@ -879,52 +1045,16 @@ export default function WeddingSite() {
       .catch(() => {});
   };
 
-  /* =======================================================
-     CLEANUP
-  ======================================================= */
-
-  useEffect(() => {
-
-    return () => {
-
-      if (
-        stopTimerRef.current
-      ) {
-        clearTimeout(
-          stopTimerRef.current
-        );
-      }
-
-      if (
-        fadeTimerRef.current
-      ) {
-        clearInterval(
-          fadeTimerRef.current
-        );
-      }
-
-    };
-
-  }, []);
-
-  /* =======================================================
-     CURRENT SIDE
-  ======================================================= */
-
-  const sideName =
-    selectedSide === "groom"
-      ? "Harit's Side"
-      : "Shreya's Side";
-
-  const personName =
-    selectedSide === "groom"
-      ? "Harit"
-      : "Shreya";
-
   return (
     <main className="overflow-hidden">
 
-      {/* AUDIO */}
+      {/* ===================================================
+          AUDIO
+
+          IMPORTANT:
+          loop = true
+          No ending timer
+      =================================================== */}
 
       <audio
         ref={audioRef}
@@ -934,650 +1064,621 @@ export default function WeddingSite() {
       />
 
       {/* ===================================================
-          OPENING CURTAIN
+          OPENING
       =================================================== */}
 
       <AnimatePresence>
         {!invitationOpen && (
           <OpeningInvitation
-            onOpen={
-              openInvitation
+            onOpen={openInvitation}
+            onDateReveal={
+              handleDateReveal
             }
           />
         )}
       </AnimatePresence>
 
       {/* ===================================================
-          SIDE SELECTION
-      =================================================== */}
-
-      <AnimatePresence>
-        {invitationOpen &&
-          !selectedSide && (
-            <SideSelection
-              onSelect={
-                handleSideSelect
-              }
-            />
-          )}
-      </AnimatePresence>
-
-      {/* ===================================================
           MUSIC BUTTON
       =================================================== */}
 
-      <AnimatePresence>
-        {selectedSide && (
-          <motion.button
-            initial={{
-              opacity: 0,
-              scale: 0.5,
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-            }}
-            whileHover={{
-              scale: 1.1,
-            }}
-            whileTap={{
-              scale: 0.9,
-            }}
-            onClick={
-              toggleMusic
-            }
-            aria-label="Toggle music"
-            className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-[#17463d] text-white border border-[#b9975b] shadow-lg flex items-center justify-center"
-          >
-            {musicPlaying
-              ? "♫"
-              : "🔇"}
-          </motion.button>
-        )}
-      </AnimatePresence>
-
-      {/* ===================================================
-          WEBSITE
-      =================================================== */}
-
-      {selectedSide && (
-        <motion.div
+      {invitationOpen && (
+        <motion.button
           initial={{
             opacity: 0,
+            scale: 0.5,
           }}
           animate={{
             opacity: 1,
+            scale: 1,
+          }}
+          whileHover={{
+            scale: 1.1,
+          }}
+          whileTap={{
+            scale: 0.9,
+          }}
+          onClick={toggleMusic}
+          aria-label="Toggle music"
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-emerald text-cream border border-gold shadow-lg flex items-center justify-center"
+        >
+          {musicPlaying
+            ? "♫"
+            : "🔇"}
+        </motion.button>
+      )}
+
+      {/* ===================================================
+          NAVIGATION
+      =================================================== */}
+
+      <header className="fixed top-0 left-0 right-0 z-40 bg-cream/90 backdrop-blur border-b border-emerald/10">
+        <nav className="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+
+          <a
+            href="#home"
+            className="font-display text-2xl text-emerald"
+          >
+            H{" "}
+            <span className="text-gold">
+              &
+            </span>{" "}
+            S
+          </a>
+
+          <div className="hidden md:flex gap-8 text-[10px] tracking-[0.25em] uppercase text-emerald">
+
+            <a
+              href="#story"
+              className="hover:text-gold transition"
+            >
+              Story
+            </a>
+
+            <a
+              href="#celebrations"
+              className="hover:text-gold transition"
+            >
+              Celebrations
+            </a>
+
+            <a
+              href="#gallery"
+              className="hover:text-gold transition"
+            >
+              Gallery
+            </a>
+
+            <a
+              href="#family"
+              className="hover:text-gold transition"
+            >
+              Family
+            </a>
+
+            <a
+              href="#travel"
+              className="hover:text-gold transition"
+            >
+              Travel
+            </a>
+
+            <a
+              href="#rsvp"
+              className="hover:text-gold transition"
+            >
+              RSVP
+            </a>
+
+          </div>
+
+          <a
+            href="#rsvp"
+            className="text-[10px] tracking-[0.2em] uppercase border border-emerald px-5 py-2 text-emerald hover:bg-emerald hover:text-cream transition"
+          >
+            RSVP
+          </a>
+
+        </nav>
+      </header>
+
+      {/* ===================================================
+          HERO
+      =================================================== */}
+
+      <section
+        id="home"
+        className="min-h-screen relative flex items-center justify-center pt-16 bg-cream wedding-pattern"
+      >
+
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-sand/50" />
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
           }}
           transition={{
-            duration: 1,
+            duration: 1.2,
           }}
+          className="relative text-center px-5"
         >
 
-          {/* =================================================
-              NAVIGATION
-          ================================================= */}
+          <p className="text-[10px] tracking-[0.45em] uppercase text-gold mb-10">
+            With the blessings of our families
+          </p>
 
-          <header className="fixed top-0 left-0 right-0 z-40 bg-[#f4eee3]/90 backdrop-blur border-b border-[#17463d]/10">
+          <h1 className="font-display text-[80px] sm:text-[145px] leading-[0.75] text-emerald">
+            Harit
 
-            <nav className="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+            <span className="block text-5xl sm:text-7xl my-7 text-gold">
+              &
+            </span>
 
-              <a
-                href="#home"
-                className="font-display text-2xl text-[#17463d]"
-              >
-                H{" "}
-                <span className="text-[#b9975b]">
-                  &
-                </span>{" "}
-                S
-              </a>
+            Shreya
+          </h1>
 
-              <div className="hidden md:flex gap-8 text-[10px] tracking-[0.25em] uppercase text-[#17463d]">
+          <p className="font-display text-2xl sm:text-3xl mt-12 text-emerald-dark">
+            are getting married
+          </p>
 
-                <a href="#story">
-                  Story
-                </a>
+          <div className="flex items-center justify-center gap-4 mt-7">
 
-                <a href="#celebrations">
-                  Celebrations
-                </a>
+            <span className="h-px w-10 bg-gold" />
 
-                <a href="#gallery">
-                  Gallery
-                </a>
+            <p className="tracking-[0.3em] text-[10px] text-emerald">
+              12 · NOVEMBER · 2026
+            </p>
 
-                <a href="#family">
-                  Family
-                </a>
+            <span className="h-px w-10 bg-gold" />
 
-                <a href="#travel">
-                  Travel
-                </a>
+          </div>
 
-                <a href="#rsvp">
-                  RSVP
-                </a>
+          <p className="tracking-[0.35em] text-[10px] uppercase text-emerald/60 mt-3">
+            Pathankot
+          </p>
 
-              </div>
+        </motion.div>
+      </section>
 
-              <button
-                onClick={() =>
-                  setSelectedSide(null)
-                }
-                className="text-[9px] tracking-[0.2em] uppercase border border-[#17463d] px-4 py-2 text-[#17463d]"
-              >
-                Change Side
-              </button>
+      {/* ===================================================
+          COUNTDOWN
+      =================================================== */}
 
-            </nav>
+      <section className="section-pad bg-emerald text-cream">
 
-          </header>
+        <div className="max-w-5xl mx-auto px-5 text-center">
 
-          {/* =================================================
-              HERO
-          ================================================= */}
+          <p className="text-[10px] tracking-[0.4em] uppercase text-champagne mb-6">
+            Counting every moment
+          </p>
 
-          <section
-            id="home"
-            className="min-h-screen relative flex items-center justify-center pt-16 bg-[#f4eee3]"
+          <h2 className="font-display text-4xl sm:text-5xl mb-10">
+            Until our forever begins
+          </h2>
+
+          <Countdown
+            active={dateRevealed}
+          />
+
+        </div>
+
+      </section>
+
+      {/* ===================================================
+          STORY
+      =================================================== */}
+
+      <section
+        id="story"
+        className="section-pad bg-cream"
+      >
+
+        <div className="max-w-4xl mx-auto px-5">
+
+          <SectionTitle
+            eyebrow="A little bit of us"
+            title="Our Story"
+          />
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+            }}
+            transition={{
+              duration: 0.8,
+            }}
+            className="text-center font-display text-2xl sm:text-3xl leading-relaxed text-emerald-dark/80"
           >
 
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#e8dcc8]/50" />
-
-            <motion.div
-              initial={{
-                opacity: 0,
-                y: 30,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 1.2,
-              }}
-              className="relative text-center px-5"
-            >
-
-              <p className="text-[10px] tracking-[0.45em] uppercase text-[#b9975b] mb-8">
-                {sideName}
-              </p>
-
-              <h1 className="font-display text-[80px] sm:text-[145px] leading-[0.75] text-[#17463d]">
-
-                Harit
-
-                <span className="block text-5xl sm:text-7xl my-7 text-[#b9975b]">
-                  &
-                </span>
-
-                Shreya
-
-              </h1>
-
-              <p className="font-display text-2xl sm:text-3xl mt-12 text-[#17463d]/80">
-                are getting married
-              </p>
-
-              {/* DATE STILL HIDDEN */}
-
-              <div className="flex items-center justify-center gap-4 mt-8">
-
-                <span className="h-px w-10 bg-[#b9975b]" />
-
-                <p className="font-display text-xl text-[#17463d]">
-                  Our forever begins soon
-                </p>
-
-                <span className="h-px w-10 bg-[#b9975b]" />
-
-              </div>
-
-              <p className="tracking-[0.35em] text-[10px] uppercase text-[#17463d]/50 mt-4">
-                Pathankot
-              </p>
-
-            </motion.div>
-
-          </section>
-
-          {/* =================================================
-              COUNTDOWN
-          ================================================= */}
-
-          <section className="py-24 bg-[#17463d] text-white">
-
-            <div className="max-w-5xl mx-auto px-5 text-center">
-
-              <p className="text-[10px] tracking-[0.4em] uppercase text-[#d6b76d] mb-6">
-                Counting every moment
-              </p>
-
-              <h2 className="font-display text-4xl sm:text-5xl mb-10">
-                Until our forever begins
-              </h2>
-
-              <Countdown />
-
-            </div>
-
-          </section>
-
-          {/* =================================================
-              STORY
-          ================================================= */}
-
-          <section
-            id="story"
-            className="py-28 bg-[#f4eee3]"
-          >
-
-            <div className="max-w-4xl mx-auto px-5">
-
-              <SectionTitle
-                eyebrow="A little bit of us"
-                title="Our Story"
-              />
-
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  y: 30,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                viewport={{
-                  once: true,
-                }}
-                className="text-center font-display text-2xl sm:text-3xl leading-relaxed text-[#17463d]/80"
-              >
-
-                <p>
-                  It all started with two
-                  people, two stories,
-                  and a little bit of
-                  destiny.
-                </p>
-
-                <p className="mt-7">
-                  From the first
-                  conversations to the
-                  day we decided to spend
-                  forever together, every
-                  chapter has brought us
-                  closer to this moment.
-                </p>
-
-                <p className="mt-7">
-                  And now, surrounded by
-                  the people we love most,
-                  we are ready to begin
-                  our next chapter.
-                </p>
-
-              </motion.div>
-
-            </div>
-
-          </section>
-
-          {/* =================================================
-              EVENTS
-          ================================================= */}
-
-          <section
-            id="celebrations"
-            className="py-28 bg-[#e8dcc8]/40"
-          >
-
-            <div className="max-w-6xl mx-auto px-5">
-
-              <SectionTitle
-                eyebrow={`${personName}'s celebrations`}
-                title="The Celebrations"
-              />
-
-              <div className="grid md:grid-cols-2 gap-6">
-
-                {commonEvents.map(
-                  (event, index) => (
-
-                    <motion.article
-                      key={event.title}
-                      initial={{
-                        opacity: 0,
-                        y: 50,
-                      }}
-                      whileInView={{
-                        opacity: 1,
-                        y: 0,
-                      }}
-                      viewport={{
-                        once: true,
-                        margin: "-80px",
-                      }}
-                      transition={{
-                        duration: 0.7,
-                        delay:
-                          index * 0.1,
-                      }}
-                      whileHover={{
-                        y: -6,
-                      }}
-                      className="relative bg-[#f4eee3] border border-[#b9975b]/35 p-8 sm:p-10 shadow-sm"
-                    >
-
-                      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#17463d] via-[#b9975b] to-[#17463d]" />
-
-                      <p className="text-[10px] tracking-[0.35em] text-[#b9975b]">
-                        {event.date}
-                      </p>
-
-                      <h3 className="font-display text-3xl sm:text-4xl text-[#17463d] mt-4">
-                        {event.title}
-                      </h3>
-
-                      {event.time && (
-                        <p className="text-sm text-[#b9975b] mt-3">
-                          {event.time}
-                        </p>
-                      )}
-
-                      <p className="text-xs tracking-[0.16em] uppercase text-[#17463d]/60 mt-4">
-                        {event.location}
-                      </p>
-
-                      {event.address && (
-                        <p className="text-sm leading-6 text-[#17463d]/60 mt-3">
-                          {event.address}
-                        </p>
-                      )}
-
-                      <p className="mt-5 text-sm leading-7 text-[#17463d]/70">
-                        {event.description}
-                      </p>
-
-                      <a
-                        href={event.map}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-block mt-7 text-[10px] tracking-[0.25em] uppercase text-[#17463d] border-b border-[#b9975b] pb-1"
-                      >
-                        View location →
-                      </a>
-
-                    </motion.article>
-
-                  )
-                )}
-
-              </div>
-
-            </div>
-
-          </section>
-
-          {/* =================================================
-              GALLERY
-          ================================================= */}
-
-          <section
-            id="gallery"
-            className="py-28 bg-[#f4eee3]"
-          >
-
-            <div className="max-w-6xl mx-auto px-5">
-
-              <SectionTitle
-                eyebrow="Our moments"
-                title="Gallery"
-              />
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-
-                {gallery.map(
-                  (photo, index) => (
-
-                    <motion.div
-                      key={photo.src}
-                      initial={{
-                        opacity: 0,
-                        scale: 0.95,
-                      }}
-                      whileInView={{
-                        opacity: 1,
-                        scale: 1,
-                      }}
-                      viewport={{
-                        once: true,
-                      }}
-                      transition={{
-                        duration: 0.8,
-                        delay:
-                          index * 0.1,
-                      }}
-                      className="overflow-hidden"
-                    >
-
-                      <img
-                        src={photo.src}
-                        alt={photo.alt}
-                        className="w-full h-[280px] sm:h-[410px] object-cover hover:scale-105 transition duration-700"
-                      />
-
-                    </motion.div>
-
-                  )
-                )}
-
-              </div>
-
-            </div>
-
-          </section>
-
-          {/* =================================================
-              FAMILY
-          ================================================= */}
-
-          <section
-            id="family"
-            className="py-28 bg-[#e8dcc8]/40"
-          >
-
-            <div className="max-w-5xl mx-auto px-5 text-center">
-
-              <SectionTitle
-                eyebrow="With love and blessings"
-                title="Our Families"
-              />
-
-              <div className="grid md:grid-cols-2 gap-7">
-
-                <div className="border border-[#b9975b]/35 bg-[#f4eee3] p-10">
-
-                  <p className="text-[10px] tracking-[0.35em] uppercase text-[#b9975b]">
-                    The Groom
+            <p>
+              It all started with two
+              people, two stories, and a
+              little bit of destiny.
+            </p>
+
+            <p className="mt-7">
+              From the first conversations
+              to the day we decided to
+              spend forever together,
+              every chapter has brought
+              us closer to this moment.
+            </p>
+
+            <p className="mt-7">
+              And now, surrounded by
+              the people we love most,
+              we are ready to begin our
+              next chapter.
+            </p>
+
+          </motion.div>
+
+        </div>
+
+      </section>
+
+      {/* ===================================================
+          EVENTS
+      =================================================== */}
+
+      <section
+        id="celebrations"
+        className="section-pad bg-sand/50"
+      >
+
+        <div className="max-w-6xl mx-auto px-5">
+
+          <SectionTitle
+            eyebrow="Save the dates"
+            title="The Celebrations"
+          />
+
+          <div className="grid md:grid-cols-2 gap-6">
+
+            {events.map(
+              (event, index) => (
+                <motion.article
+                  key={event.title}
+                  initial={{
+                    opacity: 0,
+                    y: 50,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  viewport={{
+                    once: true,
+                    margin: "-80px",
+                  }}
+                  transition={{
+                    duration: 0.7,
+                    delay:
+                      index * 0.1,
+                  }}
+                  whileHover={{
+                    y: -6,
+                  }}
+                  className="relative bg-cream border border-gold/35 p-8 sm:p-10 shadow-sm hover:shadow-xl transition-shadow duration-500"
+                >
+
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald via-gold to-emerald" />
+
+                  <p className="text-[10px] tracking-[0.35em] text-gold">
+                    {event.date}
                   </p>
 
-                  <h3 className="font-display text-4xl text-[#17463d] mt-5">
-                    Harit Sharma
+                  <h3 className="font-display text-3xl sm:text-4xl text-emerald mt-4">
+                    {event.title}
                   </h3>
 
-                  <p className="font-display text-xl text-[#17463d]/60 mt-5">
-                    Son of
+                  {event.time && (
+                    <p className="text-sm text-gold mt-3">
+                      {event.time}
+                    </p>
+                  )}
+
+                  <p className="text-xs tracking-[0.16em] uppercase text-emerald/60 mt-4">
+                    {event.location}
                   </p>
 
-                  <p className="text-sm mt-2 text-[#17463d]">
-                    Yogesh Sharma & Manju
-                  </p>
+                  {event.address && (
+                    <p className="text-sm leading-6 text-emerald/60 mt-3">
+                      {event.address}
+                    </p>
+                  )}
 
-                </div>
-
-                <div className="border border-[#b9975b]/35 bg-[#f4eee3] p-10">
-
-                  <p className="text-[10px] tracking-[0.35em] uppercase text-[#b9975b]">
-                    The Bride
-                  </p>
-
-                  <h3 className="font-display text-4xl text-[#17463d] mt-5">
-                    Shreya
-                  </h3>
-
-                  <p className="font-display text-xl text-[#17463d]/60 mt-5">
-                    Daughter of
-                  </p>
-
-                  <p className="text-sm mt-2 text-[#17463d]">
-                    Satish Kumar & Davina
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </section>
-
-          {/* =================================================
-              TRAVEL
-          ================================================= */}
-
-          <section
-            id="travel"
-            className="py-28 bg-[#f4eee3]"
-          >
-
-            <div className="max-w-5xl mx-auto px-5">
-
-              <SectionTitle
-                eyebrow="For our guests"
-                title="Travel & Stay"
-              />
-
-              <div className="grid md:grid-cols-2 gap-7">
-
-                <div className="border border-[#b9975b]/35 p-9 bg-[#e8dcc8]/30">
-
-                  <p className="text-[10px] tracking-[0.3em] uppercase text-[#b9975b]">
-                    Pre-Wedding
-                  </p>
-
-                  <h3 className="font-display text-4xl text-[#17463d] mt-4">
-                    Ambala
-                  </h3>
-
-                  <p className="mt-4 text-sm leading-7 text-[#17463d]/65">
-                    Our celebrations before
-                    the wedding will take
-                    place in Ambala City.
-                  </p>
-
-                </div>
-
-                <div className="border border-[#b9975b]/35 p-9 bg-[#e8dcc8]/30">
-
-                  <p className="text-[10px] tracking-[0.3em] uppercase text-[#b9975b]">
-                    Wedding
-                  </p>
-
-                  <h3 className="font-display text-4xl text-[#17463d] mt-4">
-                    Pathankot
-                  </h3>
-
-                  <p className="mt-4 text-sm leading-7 text-[#17463d]/65">
-                    We head to Pathankot for
-                    our wedding.
+                  <p className="mt-5 text-sm leading-7 text-emerald-dark/70">
+                    {event.description}
                   </p>
 
                   <a
-                    href="https://share.google/dW1Nnjn30UPZdNYky"
+                    href={event.map}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-block mt-7 text-[10px] tracking-[0.25em] uppercase border-b border-[#b9975b] pb-1 text-[#17463d]"
+                    className="inline-block mt-7 text-[10px] tracking-[0.25em] uppercase text-emerald border-b border-gold pb-1"
                   >
-                    Wedding venue →
+                    View location →
                   </a>
 
-                </div>
+                </motion.article>
+              )
+            )}
 
-              </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* ===================================================
+          GALLERY
+      =================================================== */}
+
+      <section
+        id="gallery"
+        className="section-pad bg-cream"
+      >
+
+        <div className="max-w-6xl mx-auto px-5">
+
+          <SectionTitle
+            eyebrow="Our moments"
+            title="Gallery"
+          />
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+            {gallery.map(
+              (photo, index) => (
+                <motion.div
+                  key={photo.src}
+                  initial={{
+                    opacity: 0,
+                    scale: 0.95,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    duration: 0.8,
+                    delay:
+                      index * 0.1,
+                  }}
+                  className="overflow-hidden"
+                >
+
+                  <img
+                    src={photo.src}
+                    alt={photo.alt}
+                    className="w-full h-[280px] sm:h-[410px] object-cover hover:scale-105 transition duration-700"
+                  />
+
+                </motion.div>
+              )
+            )}
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* ===================================================
+          FAMILY
+      =================================================== */}
+
+      <section
+        id="family"
+        className="section-pad bg-sand/45"
+      >
+
+        <div className="max-w-5xl mx-auto px-5 text-center">
+
+          <SectionTitle
+            eyebrow="With love and blessings"
+            title="Our Families"
+          />
+
+          <div className="grid md:grid-cols-2 gap-7">
+
+            <div className="border border-gold/35 bg-cream p-10">
+
+              <p className="text-[10px] tracking-[0.35em] uppercase text-gold">
+                The Groom
+              </p>
+
+              <h3 className="font-display text-4xl text-emerald mt-5">
+                Harit Sharma
+              </h3>
+
+              <p className="font-display text-xl text-emerald/60 mt-5">
+                Son of
+              </p>
+
+              <p className="text-sm mt-2 text-emerald">
+                Yogesh Sharma & Manju
+              </p>
 
             </div>
 
-          </section>
+            <div className="border border-gold/35 bg-cream p-10">
 
-          {/* =================================================
-              RSVP
-          ================================================= */}
-
-          <section
-            id="rsvp"
-            className="py-28 bg-[#17463d] text-white"
-          >
-
-            <div className="max-w-2xl mx-auto px-5 text-center">
-
-              <p className="text-[10px] tracking-[0.4em] uppercase text-[#d6b76d]">
-                We'd love to celebrate
-                with you
+              <p className="text-[10px] tracking-[0.35em] uppercase text-gold">
+                The Bride
               </p>
 
-              <h2 className="font-display text-5xl sm:text-6xl mt-4">
-                RSVP
-              </h2>
+              <h3 className="font-display text-4xl text-emerald mt-5">
+                Shreya
+              </h3>
 
-              <div className="w-16 h-px bg-[#d6b76d] mx-auto mt-6 mb-8" />
-
-              <p className="text-sm leading-7 text-white/70">
-                Your presence would mean
-                the world to us. Please join
-                us as we begin this beautiful
-                new chapter.
+              <p className="font-display text-xl text-emerald/60 mt-5">
+                Daughter of
               </p>
 
-              <button className="mt-9 bg-[#f4eee3] text-[#17463d] px-8 py-3 text-[10px] tracking-[0.3em] uppercase">
-                RSVP Coming Soon
-              </button>
+              <p className="text-sm mt-2 text-emerald">
+                Satish Kumar & Davina
+              </p>
 
             </div>
 
-          </section>
+          </div>
 
-          {/* =================================================
-              FOOTER
-          ================================================= */}
+        </div>
 
-          <footer className="bg-[#0b3029] text-white text-center py-16 px-5">
+      </section>
 
-            <p className="font-display text-6xl text-[#d6b76d]">
-              H{" "}
-              <span className="text-white">
-                &
-              </span>{" "}
-              S
-            </p>
+      {/* ===================================================
+          TRAVEL
+      =================================================== */}
 
-            <p className="font-display text-3xl mt-4">
-              Harit & Shreya
-            </p>
+      <section
+        id="travel"
+        className="section-pad bg-cream"
+      >
 
-            <p className="text-[10px] tracking-[0.35em] uppercase text-white/50 mt-5">
-              A new chapter begins ·
-              Pathankot
-            </p>
+        <div className="max-w-5xl mx-auto px-5">
 
-            <p className="text-xs text-white/30 mt-10">
-              Made with love.
-            </p>
+          <SectionTitle
+            eyebrow="For our guests"
+            title="Travel & Stay"
+          />
 
-          </footer>
+          <div className="grid md:grid-cols-2 gap-7">
 
-        </motion.div>
-      )}
+            <div className="border border-gold/35 p-9 bg-sand/30">
+
+              <p className="text-[10px] tracking-[0.3em] uppercase text-gold">
+                Pre-Wedding
+              </p>
+
+              <h3 className="font-display text-4xl text-emerald mt-4">
+                Ambala
+              </h3>
+
+              <p className="mt-4 text-sm leading-7 text-emerald/65">
+                Our celebrations before
+                the wedding will take
+                place in Ambala City.
+              </p>
+
+            </div>
+
+            <div className="border border-gold/35 p-9 bg-sand/30">
+
+              <p className="text-[10px] tracking-[0.3em] uppercase text-gold">
+                Wedding
+              </p>
+
+              <h3 className="font-display text-4xl text-emerald mt-4">
+                Pathankot
+              </h3>
+
+              <p className="mt-4 text-sm leading-7 text-emerald/65">
+                We head to Pathankot for
+                our wedding on 12 November
+                2026.
+              </p>
+
+              <a
+                href="https://share.google/dW1Nnjn30UPZdNYky"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block mt-7 text-[10px] tracking-[0.25em] uppercase border-b border-gold pb-1 text-emerald"
+              >
+                Wedding venue →
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* ===================================================
+          RSVP
+      =================================================== */}
+
+      <section
+        id="rsvp"
+        className="section-pad bg-emerald text-cream"
+      >
+
+        <div className="max-w-2xl mx-auto px-5 text-center">
+
+          <p className="text-[10px] tracking-[0.4em] uppercase text-champagne">
+            We'd love to celebrate
+            with you
+          </p>
+
+          <h2 className="font-display text-5xl sm:text-6xl mt-4">
+            RSVP
+          </h2>
+
+          <div className="gold-rule mx-auto mt-6 mb-8" />
+
+          <p className="text-sm leading-7 text-cream/70">
+            Your presence would mean
+            the world to us. Please join
+            us as we begin this beautiful
+            new chapter.
+          </p>
+
+          <button className="mt-9 bg-cream text-emerald px-8 py-3 text-[10px] tracking-[0.3em] uppercase">
+            RSVP Coming Soon
+          </button>
+
+        </div>
+
+      </section>
+
+      {/* ===================================================
+          FOOTER
+      =================================================== */}
+
+      <footer className="bg-emerald-dark text-cream text-center py-16 px-5">
+
+        <p className="font-display text-6xl text-champagne">
+          H{" "}
+          <span className="text-cream">
+            &
+          </span>{" "}
+          S
+        </p>
+
+        <p className="font-display text-3xl mt-4">
+          Harit & Shreya
+        </p>
+
+        <p className="text-[10px] tracking-[0.35em] uppercase text-cream/50 mt-5">
+          12 November 2026 ·
+          Pathankot
+        </p>
+
+        <p className="text-xs text-cream/30 mt-10">
+          Made with love.
+        </p>
+
+      </footer>
 
     </main>
   );
