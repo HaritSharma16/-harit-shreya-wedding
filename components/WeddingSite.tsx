@@ -785,20 +785,20 @@ function OpeningCurtain({
             ✦
           </motion.div>
 
-          <p className="text-[10px] sm:text-xs tracking-[0.5em] uppercase text-[#70464c] font-semibold">
+          <p className="text-[10px] sm:text-xs tracking-[0.5em] uppercase text-white font-semibold">
             You are invited
           </p>
 
           <div className="w-16 h-px bg-[#c98f8f] mx-auto mt-6" />
 
-          <p className="font-display text-2xl sm:text-3xl text-[#70464c] mt-8">
+          <p className="font-display text-2xl sm:text-3xl text-white mt-8">
             To a celebration of love
           </p>
 
           {/* SIDE SELECTION */}
 
           <div className="mt-12">
-            <p className="text-[9px] tracking-[0.35em] uppercase text-[#70464c]/80 mb-5 font-bold">
+            <p className="text-[9px] tracking-[0.35em] uppercase text-white/80 mb-5 font-bold">
               Choose your side
             </p>
 
@@ -811,7 +811,7 @@ function OpeningCurtain({
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "groom"
                     ? "bg-[#b97979] text-white border-[#b97979]"
-                    : "bg-transparent border-[#b97979] text-[#70464c] hover:bg-[#f7e9e4]"
+                    : "bg-transparent border-[#b97979] text-white hover:bg-[#f7e9e4]"
                 }`}
               >
                 Groom&apos;s Side
@@ -825,7 +825,7 @@ function OpeningCurtain({
                 className={`px-7 py-3 border text-[10px] tracking-[0.25em] uppercase transition-all ${
                   selectedSide === "bride"
                     ? "bg-[#b97979] text-white border-[#b97979]"
-                    : "bg-transparent border-[#b97979] text-[#70464c] hover:bg-[#f7e9e4]"
+                    : "bg-transparent border-[#b97979] text-white hover:bg-[#f7e9e4]"
                 }`}
               >
                 Bride&apos;s Side
