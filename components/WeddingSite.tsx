@@ -1524,38 +1524,49 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      {/* RSVP */}
+     
+     {/* RSVP */}
+<section
+  id="rsvp"
+  className="py-28 bg-[#f7e9e4] text-[#70464c]"
+>
+  <div className="max-w-2xl mx-auto px-5 text-center">
 
-      <section
-        id="rsvp"
-        className="py-24 bg-[#70464c] text-white"
-      >
-        <div className="max-w-2xl mx-auto px-5 text-center">
-          <p className="text-[10px] tracking-[0.4em] uppercase text-[#e8b9a9]">
-            We&apos;d love to celebrate with you
-          </p>
+    <p className="text-[10px] tracking-[0.4em] uppercase text-[#b97979]">
+      We&apos;d love to celebrate with you
+    </p>
 
-          <h2 className="font-display text-5xl sm:text-6xl mt-4">
-            RSVP
-          </h2>
+    <h2 className="font-display text-5xl sm:text-6xl mt-5 text-[#70464c]">
+      RSVP
+    </h2>
 
-          <div className="w-16 h-px bg-[#d9b29d] mx-auto mt-6 mb-8" />
+    <div className="w-16 h-px bg-[#c99a98] mx-auto mt-6 mb-8" />
 
-          <p className="text-sm leading-7 text-white/70">
-            Your presence would mean the world to
-            us. Please join us as we begin this
-            beautiful new chapter.
-          </p>
+    <p className="text-sm leading-7 text-[#70464c]/70 max-w-lg mx-auto">
+      Your presence would mean the world to us.
+      Please let us know if you&apos;ll be joining us
+      as we celebrate this beautiful new beginning.
+    </p>
 
-          <button
-            type="button"
-            className="mt-9 bg-[#fffaf5] text-[#70464c] px-8 py-3 text-[10px] tracking-[0.3em] uppercase"
-          >
-            RSVP Coming Soon
-          </button>
-        </div>
-      </section>
+    {/* WhatsApp RSVP */}
+    <motion.a
+      href="https://wa.me/919728514569?text=Hi%20Harit%20%26%20Shreya%2C%20I%20would%20love%20to%20join%20you%20for%20your%20wedding%20celebration.%20Looking%20forward%20to%20celebrating%20with%20you!"
+      target="_blank"
+      rel="noreferrer"
+      whileHover={{ scale: 1.04 }}
+      whileTap={{ scale: 0.97 }}
+      className="inline-flex items-center justify-center gap-3 mt-9 px-9 py-4 bg-[#c99a98] text-white text-[10px] tracking-[0.3em] uppercase shadow-lg hover:bg-[#b98282] transition"
+    >
+      <span className="text-lg">✆</span>
+      RSVP via WhatsApp
+    </motion.a>
 
+    <p className="text-[9px] tracking-[0.25em] uppercase text-[#70464c]/40 mt-5">
+      Tap above to confirm your presence
+    </p>
+
+  </div>
+</section>
       {/* FOOTER */}
 
       <footer className="bg-[#503238] text-white text-center py-16 px-5">
