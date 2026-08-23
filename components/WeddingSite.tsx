@@ -291,23 +291,23 @@ function OpeningCurtain({
             ✦
           </motion.div>
 
-          <p className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-[#17463d]/60">
-            With the blessings of our families
-          </p>
+          <p className="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-[#17463d]/80 font-medium">
+  With the blessings of our families
+</p>
 
-          <h1 className="font-display text-[65px] sm:text-[105px] leading-[0.75] text-[#17463d] mt-8">
-            Harit
+          <h1 className="font-display text-[65px] sm:text-[105px] leading-[0.75] text-[#0b3029] drop-shadow-[0_2px_8px_rgba(185,151,91,0.18)]">
+  Harit
 
-            <span className="block text-4xl sm:text-6xl text-[#b9975b] my-6">
-              &
-            </span>
+  <span className="block text-4xl sm:text-6xl text-[#a27b35] my-6 font-medium">
+    &
+  </span>
 
-            Shreya
-          </h1>
+  Shreya
+</h1>
 
-          <p className="font-display text-xl sm:text-2xl text-[#17463d]/70 mt-9">
-            A celebration of two families
-          </p>
+          <p className="font-display text-xl sm:text-2xl text-[#17463d]/80 mt-9">
+  A celebration of two families
+</p>
 
           {/* SIDE SELECTION */}
 
